@@ -1,17 +1,5 @@
-import type { LinhaTerminal, Site } from "./pt";
-
-const gh = (nome: string) => `https://github.com/dv-dev1/${nome}`;
-
-const run: LinhaTerminal[] = [
-  { t: "$ python -m demo.cli run --application A-1042", c: "l-cmd" },
-  { t: "[fetch_application] proposal A-1042, R$ 40.000,00 over 24 months", c: "l-out" },
-  { t: "[score]             score 742, declared income R$ 8.500,00", c: "l-out" },
-  { t: "[assess]            income not verified yet", c: "l-out" },
-  { t: "[fetch_income]      verified income R$ 8.000,00", c: "l-out" },
-  { t: "[assess]            debt ratio 21 percent, within policy", c: "l-out" },
-  { t: "[check_threshold]   40000.00 above the 5000.00 limit", c: "l-out" },
-  { t: "PAUSED  thread=f3a1  waiting: approve credit of R$ 40.000,00 for customer 88231?", c: "l-say" },
-];
+// Com a extensão: o node --test carrega este arquivo em tempo de execução, sem resolver "./pt".
+import { codHumano, codNo, gh, resume, run, type Site } from "./pt.ts";
 
 export const site: Site = {
   meta: {
@@ -269,10 +257,7 @@ export const site: Site = {
         run,
         resume: [
           { t: "# the process died. close the terminal, restart, come back tomorrow.", c: "l-cmt" },
-          { t: "$ python -m demo.cli resume f3a1 approved", c: "l-cmd" },
-          { t: "[human_approval]    answer: approved", c: "l-out" },
-          { t: "[disburse]          credit of R$ 40.000,00 released", c: "l-out" },
-          { t: "OK", c: "l-say" },
+          ...resume,
         ],
         aprovar: "resume f3a1 approved",
         notaAprovar: "the process has already exited. approval wakes the graph.",
@@ -291,19 +276,9 @@ export const site: Site = {
         { k: "interrupt.py", v: "interrupt() and the exception behind it" },
       ],
       no: [{ hi: "A node is a plain function." }, " It never touches the database and never knows it was paused. It returns only what changed."],
-      codNo: [
-        "def assess(state: dict) -> dict:",
-        '    if "verified_income" not in state["customer"]:',
-        '        return {"facts": ["income not verified"]}',
-        '    return {"amount": state["application"]["value"],',
-        '            "facts": ["within policy"]}',
-      ],
+      codNo,
       humano: [{ hi: "Asking a human is a call." }, " On the first pass interrupt raises; the engine saves state and question in SQLite and exits. On resume, the same call returns the answer."],
-      codHumano: [
-        "def human_approval(state: dict) -> dict:",
-        "    answer = interrupt(f\"approve credit of {state['amount']}?\")",
-        '    return {"approved": answer == "approved"}',
-      ],
+      codHumano,
     },
     armadilha: {
       titulo: "The trap",

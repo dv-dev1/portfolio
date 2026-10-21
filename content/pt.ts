@@ -122,10 +122,10 @@ export type Site = {
   naoEncontrada: { aba: string; eyebrow: string; titulo: string; texto: string; inicio: string; projetos: string };
 };
 
-const gh = (nome: string) => `https://github.com/dv-dev1/${nome}`;
+export const gh = (nome: string) => `https://github.com/dv-dev1/${nome}`;
 
 // As linhas de terminal e de código são saída real do agentgraph, iguais nos dois idiomas.
-const run: LinhaTerminal[] = [
+export const run: LinhaTerminal[] = [
   { t: "$ python -m demo.cli run --application A-1042", c: "l-cmd" },
   { t: "[fetch_application] proposal A-1042, R$ 40.000,00 over 24 months", c: "l-out" },
   { t: "[score]             score 742, declared income R$ 8.500,00", c: "l-out" },
@@ -134,6 +134,28 @@ const run: LinhaTerminal[] = [
   { t: "[assess]            debt ratio 21 percent, within policy", c: "l-out" },
   { t: "[check_threshold]   40000.00 above the 5000.00 limit", c: "l-out" },
   { t: "PAUSED  thread=f3a1  waiting: approve credit of R$ 40.000,00 for customer 88231?", c: "l-say" },
+];
+
+// Só o comentário de abertura é traduzido; cada idioma o põe na frente destas linhas.
+export const resume: LinhaTerminal[] = [
+  { t: "$ python -m demo.cli resume f3a1 approved", c: "l-cmd" },
+  { t: "[human_approval]    answer: approved", c: "l-out" },
+  { t: "[disburse]          credit of R$ 40.000,00 released", c: "l-out" },
+  { t: "OK", c: "l-say" },
+];
+
+export const codNo = [
+  "def assess(state: dict) -> dict:",
+  '    if "verified_income" not in state["customer"]:',
+  '        return {"facts": ["income not verified"]}',
+  '    return {"amount": state["application"]["value"],',
+  '            "facts": ["within policy"]}',
+];
+
+export const codHumano = [
+  "def human_approval(state: dict) -> dict:",
+  "    answer = interrupt(f\"approve credit of {state['amount']}?\")",
+  '    return {"approved": answer == "approved"}',
 ];
 
 export const site: Site = {
@@ -392,10 +414,7 @@ export const site: Site = {
         run,
         resume: [
           { t: "# o processo morreu. feche o terminal, reinicie, volte amanhã.", c: "l-cmt" },
-          { t: "$ python -m demo.cli resume f3a1 approved", c: "l-cmd" },
-          { t: "[human_approval]    answer: approved", c: "l-out" },
-          { t: "[disburse]          credit of R$ 40.000,00 released", c: "l-out" },
-          { t: "OK", c: "l-say" },
+          ...resume,
         ],
         aprovar: "resume f3a1 approved",
         notaAprovar: "o processo já saiu. a aprovação acorda o grafo.",
@@ -414,19 +433,9 @@ export const site: Site = {
         { k: "interrupt.py", v: "interrupt() e a exceção por trás dele" },
       ],
       no: [{ hi: "Um nó é uma função comum." }, " Nunca toca o banco e nunca sabe que foi pausado. Devolve só o que mudou."],
-      codNo: [
-        "def assess(state: dict) -> dict:",
-        '    if "verified_income" not in state["customer"]:',
-        '        return {"facts": ["income not verified"]}',
-        '    return {"amount": state["application"]["value"],',
-        '            "facts": ["within policy"]}',
-      ],
+      codNo,
       humano: [{ hi: "Pedir a um humano é uma chamada." }, " Na primeira passada o interrupt lança; o motor grava estado e pergunta no SQLite e sai. No resume, a mesma chamada devolve a resposta."],
-      codHumano: [
-        "def human_approval(state: dict) -> dict:",
-        "    answer = interrupt(f\"approve credit of {state['amount']}?\")",
-        '    return {"approved": answer == "approved"}',
-      ],
+      codHumano,
     },
     armadilha: {
       titulo: "A armadilha",

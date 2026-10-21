@@ -14,7 +14,6 @@ export async function getSite(): Promise<Site> {
   return sites[await getLocale()];
 }
 
-// R10 e R11: caso abre a página do caso; sem caso, o site no ar ou o repositório; trabalho de empresa não tem link.
 export function destino(p: Project, locale: Locale): string | undefined {
   return p.slug === pt.caso.slug ? `/${locale}/projects/${p.slug}/` : (p.site ?? p.repo);
 }

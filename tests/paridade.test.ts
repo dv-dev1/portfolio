@@ -7,6 +7,11 @@ const ligacoes = (s: Site) => s.projetos.lista.map(({ slug, area, repo, site }) 
 
 test("pt e en listam os mesmos projetos, na mesma ordem", () => {
   assert.deepEqual(ligacoes(en), ligacoes(pt));
+  assert.equal(en.caso.slug, pt.caso.slug);
+  assert.deepEqual(
+    en.inicio.destaques.map((d) => d.slug),
+    pt.inicio.destaques.map((d) => d.slug),
+  );
 });
 
 test("destaques e caso apontam para projetos da lista", () => {
