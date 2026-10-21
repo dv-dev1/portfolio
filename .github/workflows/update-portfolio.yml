@@ -8,7 +8,7 @@ on:
 permissions: {}
 
 jobs:
-  # O modelo roda sem permissão de escrita e sem tests/ editável depois dele: quem valida e abre o PR é outro job.
+  # O código que o modelo escreve só executa em job sem escrita: ler edita, validar roda build e testes, pr só abre o PR.
   ler:
     permissions:
       contents: read
@@ -64,15 +64,15 @@ jobs:
       - uses: actions/upload-artifact@v7
         with:
           name: content
+          retention-days: 1
           path: |
             content/pt.ts
             content/en.ts
 
-  pr:
+  validar:
     needs: ler
     permissions:
-      contents: write
-      pull-requests: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -88,6 +88,19 @@ jobs:
           path: content
       - name: Validar
         run: npx next typegen && npx tsc --noEmit && npm run build && node --test --test-reporter=tap tests/
+
+  pr:
+    needs: validar
+    permissions:
+      contents: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
+        with:
+          name: content
+          path: content
       - name: Abrir ou atualizar o PR
         id: pr
         uses: peter-evans/create-pull-request@v8

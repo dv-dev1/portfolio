@@ -27,9 +27,9 @@ A portfolio goes stale the week after it ships, and one that names a client unde
 
 ```mermaid
 flowchart LR
-    R[repos with topic portfolio] --> B[Monday job 1 - the model only reads and edits the texts]
-    B --> V[job 2 - no model, runs parity and the guard]
-    V --> PR[pull request on content/pt.ts and content/en.ts]
+    R[repos with topic portfolio] --> L[job ler - the model only reads and edits the texts]
+    L --> V[job validar - no model, no write access, runs parity and the guard]
+    V --> PR[job pr - only opens the pull request on content/pt.ts and content/en.ts]
     PR --> D{Daniel merges?}
     D -- no --> X[nothing changes]
     D -- yes --> CI[CI: types, lint, build, guard, e2e]
@@ -48,7 +48,7 @@ The guard catching a forbidden word pasted into the About page:
 $ npm run build && node --test --test-reporter=tap tests/
 not ok 2 - nenhuma página publica termo proibido nem sigiloso
   ---
-  duration_ms: 73.621458
+  duration_ms: 81.131041
   type: 'test'
   failureType: 'testCodeFailure'
   error: |-
@@ -59,7 +59,8 @@ not ok 2 - nenhuma página publica termo proibido nem sigiloso
     +   'pt/about/__next.$d$lang.about.__PAGE__.txt: acurácia',
     +   'pt/about/__next._full.txt: acurácia',
     +   'pt/about/index.html: acurácia',
-    +   'pt/about/index.txt: acurácia'
+    +   'pt/about/index.txt: acurácia',
+    +   'content/pt.ts: acurácia'
     + ]
     - []
 
@@ -71,6 +72,7 @@ not ok 2 - nenhuma página publica termo proibido nem sigiloso
     1: 'pt/about/__next._full.txt: acurácia'
     2: 'pt/about/index.html: acurácia'
     3: 'pt/about/index.txt: acurácia'
+    4: 'content/pt.ts: acurácia'
 # tests 4
 # pass 3
 # fail 1
@@ -105,7 +107,7 @@ Node 26 runs the `.ts` tests directly, with no build step for them.
 | `components/TraceAoVivo.tsx` | reads `/cdn-cgi/trace` in the visitor's browser and keeps four fields |
 | `components/Email.tsx` | joins the e-mail address only after hydration |
 | `tests/conteudo.test.ts` | scans every `out/**/*.{html,txt}` and the sources `content/pt.ts` and `content/en.ts` for forbidden and NDA terms |
-| `.github/workflows/update-portfolio.yml` | the Monday bot: one job where the model only reads, another without the model that validates and opens the pull request |
+| `.github/workflows/update-portfolio.yml` | the Monday bot in three jobs: the model reads and edits, a read-only job validates, a last one opens the pull request |
 
 ```ts
 // components/TraceAoVivo.tsx
