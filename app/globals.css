@@ -1,4 +1,4 @@
-/* Porte do canvas em specs/canvas; regra de uma página só fica sob .p-<página>. */
+/* Regra de uma página só fica sob .p-<página>. */
 :root {
   --preto: #000;
   --texto: #8F8F8F;
