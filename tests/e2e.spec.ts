@@ -30,3 +30,10 @@ test("html lang segue o idioma da rota", async ({ page }) => {
   await page.goto("/pt/");
   await expect(page.locator("html")).toHaveAttribute("lang", "pt-BR");
 });
+
+test("título da aba segue o idioma", async ({ page }) => {
+  await page.goto("/en/");
+  await expect(page).toHaveTitle("Daniel Vieira · applied AI engineer");
+  await page.goto("/pt/");
+  await expect(page).toHaveTitle("Daniel Vieira · engenheiro de IA aplicada");
+});

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { getLocale } from "@/content/i18n";
+import { alternates, getLocale, getSite } from "@/content/i18n";
 import { htmlLang, locales, siteUrl } from "@/content/locales";
 import { fontMono, fontSans } from "../fonts";
 import "../globals.css";
@@ -10,10 +10,15 @@ export function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
 }
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
-  title: { default: "Daniel Vieira", template: "%s · Daniel Vieira" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const [site, locale] = await Promise.all([getSite(), getLocale()]);
+  return {
+    metadataBase: new URL(siteUrl),
+    title: { default: site.meta.titulo, template: "%s · Daniel Vieira" },
+    description: site.meta.descricao,
+    alternates: alternates(locale, ""),
+  };
+}
 
 export const viewport: Viewport = { themeColor: "#000000" };
 
