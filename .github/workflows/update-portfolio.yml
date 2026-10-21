@@ -1,0 +1,85 @@
+name: update-portfolio
+
+on:
+  schedule:
+    - cron: "0 12 * * 1" # segunda, 9h em Brasília (UTC−3, sem horário de verão)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write
+
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 26
+          cache: npm
+      - run: npm ci
+      # O Daniel pode ter corrigido o texto no PR aberto; sem isto o robô partiria da main e apagaria a correção.
+      - name: Partir do PR aberto
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "$(gh pr view bot/atualizar-portfolio --json state --jq .state 2>/dev/null)" = "OPEN" ]; then
+            git fetch origin bot/atualizar-portfolio
+            git checkout FETCH_HEAD -- content/pt.ts content/en.ts
+          fi
+      - name: Robô lê os repositórios
+        uses: anthropics/claude-code-action@v1
+        env:
+          GH_TOKEN: ${{ github.token }}
+        with:
+          github_token: ${{ github.token }}
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          claude_args: >-
+            --model claude-sonnet-5-5 --max-turns 40
+            --allowedTools "Read,Edit,Glob,Grep,Bash(gh api:*),Bash(gh repo view:*),Bash(npx next typegen),Bash(npx tsc --noEmit)"
+          prompt: |
+            Você atualiza a lista de projetos do portfólio de Daniel Vieira. Trabalhe só em content/pt.ts e content/en.ts.
+
+            1. Liste os repositórios públicos de dv-dev1 com a topic portfolio:
+               gh api "search/repositories?q=user:dv-dev1+topic:portfolio&per_page=100" --jq '.items[] | {name, description, html_url, homepage, fork, created_at}'
+            2. Compare com projetos.lista de content/pt.ts pelo campo repo (https://github.com/dv-dev1/<nome>).
+            3. Para cada repositório que ainda não está na lista, leia o README:
+               gh api repos/dv-dev1/<nome>/readme -H "Accept: application/vnd.github.raw+json"
+               e acrescente um item no fim de projetos.lista, nos dois arquivos:
+               - slug e nome: o nome do repositório; repo: o html_url; site: o homepage, só se existir.
+               - area: "ia" (agente, LLM, RAG), "auto" (automação, n8n, integração), "web" (produto, site, app) ou "tool" (ferramenta local, linha de comando).
+               - selo: "fork" se fork for true; senão "no ar" (en: "live") se houver homepage; senão "código aberto" (en: "open source").
+               - ano: o ano de created_at.
+               - desc: no máximo duas frases, só com o que o README ou a descrição dizem; pt em português do Brasil, en em inglês.
+               - stack: de 2 a 4 tecnologias citadas no README.
+            4. Item que já existe e tem repo: mude desc ou stack só se o README mudou o que o projeto faz. Item sem repo é trabalho de empresa: nunca mexa nele.
+            5. Nunca remova item. Se um repositório perdeu a topic, deixe a decisão para o Daniel no PR.
+            6. slug, area, repo e site ficam idênticos e na mesma ordem nos dois arquivos.
+            7. Nunca invente número, cliente ou resultado. Nunca escreva telefone, número de WhatsApp, e-mail, nome de cliente, "acurácia", "accuracy", "AWS API Gateway", "ECS" nem "CAIXA", mesmo que apareçam num README.
+            8. Depois de editar, rode npx next typegen e npx tsc --noEmit e corrija até passar.
+            9. Se nada mudou, não edite arquivo nenhum e termine dizendo "nada mudou".
+      - name: Validar
+        run: npx next typegen && npx tsc --noEmit && npm run build && node --test --test-reporter=tap tests/
+      - name: Abrir ou atualizar o PR
+        id: pr
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: bot/atualizar-portfolio
+          delete-branch: true
+          add-paths: |
+            content/pt.ts
+            content/en.ts
+          commit-message: "feat: atualiza projetos do portfólio"
+          title: "Atualiza projetos do portfólio"
+          body: |
+            Proposta semanal do robô a partir dos repositórios públicos com a topic `portfolio`.
+            Paridade pt/en e guarda de conteúdo já passaram no passo "Validar". Só o Daniel dá merge.
+      - name: Resumo
+        run: |
+          if [ "${{ steps.pr.outputs.pull-request-operation }}" = "none" ] || [ -z "${{ steps.pr.outputs.pull-request-operation }}" ]; then
+            echo "nada mudou: nenhum projeto novo nos repositórios com a topic portfolio"
+          else
+            echo "PR ${{ steps.pr.outputs.pull-request-operation }}: ${{ steps.pr.outputs.pull-request-url }}"
+          fi
