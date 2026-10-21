@@ -14,7 +14,7 @@ export function lerTrace(texto: string): Trace | null {
   const colo = campo("colo");
   // Um 200 que não é trace (fallback HTML, proxy) não traz colo de três letras.
   if (!colo || !/^[A-Z]{3}$/.test(colo)) return null;
-  return { colo, http: campo("http") ?? EXEMPLO.http, loc: campo("loc") ?? EXEMPLO.loc, tls: campo("tls") ?? EXEMPLO.tls };
+  return { colo, http: campo("http") || EXEMPLO.http, loc: campo("loc") || EXEMPLO.loc, tls: campo("tls") || EXEMPLO.tls };
 }
 
 export function TraceAoVivo({ textos, commit }: { textos: TextosCaminho; commit: string }) {
@@ -68,7 +68,7 @@ export function TraceAoVivo({ textos, commit }: { textos: TextosCaminho; commit:
           <p className="l-mono l-dim">GET /cdn-cgi/trace · {rotulo}</p>
           <p>{textos.traceTexto}</p>
         </div>
-        <div className="l-trace l-mono" key={fase}>
+        <div className="l-trace l-mono" key={fase === "vivo" ? "vivo" : "base"}>
           {CAMPOS.map((k, i) => (
             <span key={k} className="l-tl" style={{ animationDelay: `${(0.4 + i * 0.32).toFixed(2)}s` }}>
               <span className="l-dim">{k}=</span>
