@@ -1,0 +1,10 @@
+node_modules/
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+test-results/
+playwright-report/
+# Documentos de trabalho locais: a spec cita o cliente sob NDA e o canvas traz o telefone.
+/specs/
+/MAPA.md
