@@ -159,3 +159,56 @@ test("copiar sem área de transferência avisa", async ({ page }) => {
   await page.getByRole("button", { name: "copiar e-mail" }).click();
   await expect(page.getByRole("button", { name: "copie manualmente" })).toBeVisible();
 });
+
+test("filtro por área deixa só a área e Todos volta à lista", async ({ page }) => {
+  await abrir(page, "/pt/projects/");
+  const linhas = page.locator(".l-list > li");
+  const total = await linhas.count();
+  const filtros = page.getByRole("group", { name: "Filtrar por área" });
+  await filtros.getByRole("button", { name: /^Agentes e IA/ }).click();
+  await expect(filtros.getByRole("button", { name: /^Agentes e IA/ })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator('.l-list > li:not([data-area="ia"])')).toHaveCount(0);
+  const ia = await linhas.count();
+  expect(ia).toBeGreaterThan(0);
+  expect(ia).toBeLessThan(total);
+  await filtros.getByRole("button", { name: /^Todos/ }).click();
+  await expect(linhas).toHaveCount(total);
+});
+
+test("trabalho de empresa aparece sem link e com o selo trabalho", async ({ page }) => {
+  await abrir(page, "/pt/projects/");
+  const linha = page.locator(".l-list > li", { hasText: "Agendamento de exames" });
+  await expect(linha).toContainText("trabalho");
+  await expect(linha.locator("a")).toHaveCount(0);
+});
+
+test("idioma em projetos leva a /en/projects/", async ({ page }) => {
+  await abrir(page, "/pt/projects/");
+  await page.getByRole("group", { name: "Idioma" }).getByRole("link", { name: "en" }).click();
+  await expect(page).toHaveURL(/\/en\/projects\/$/);
+});
+
+test("idioma no caso mantém o caso", async ({ page }) => {
+  await abrir(page, "/pt/projects/agentgraph/");
+  await page.getByRole("group", { name: "Idioma" }).getByRole("link", { name: "en" }).click();
+  await expect(page).toHaveURL(/\/en\/projects\/agentgraph\/$/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("agentgraph");
+});
+
+test("demo do agentgraph pausa e retoma", async ({ page }) => {
+  await abrir(page, "/pt/projects/agentgraph/");
+  const log = page.getByRole("log", { name: "Saída do terminal" });
+  await expect(log).toContainText("PAUSED");
+  await page.getByRole("button", { name: "resume f3a1 approved" }).click();
+  await expect(log).toContainText("credit of R$ 40.000,00 released");
+  await expect(log.locator(".l-say").last()).toHaveText("OK");
+  await expect(page.getByRole("button", { name: "rodar de novo" })).toBeVisible();
+});
+
+test("cards do início levam ao caso ou ao site", async ({ page }) => {
+  await abrir(page, "/pt/");
+  await expect(page.locator(".l-card", { hasText: "quehorasvoto" })).toHaveAttribute("href", "https://quehorasvoto.green-grid.workers.dev");
+  await page.locator(".l-card", { hasText: "agentgraph" }).click();
+  await expect(page).toHaveURL(/\/pt\/projects\/agentgraph\/$/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("agentgraph");
+});
