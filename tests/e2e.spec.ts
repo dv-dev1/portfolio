@@ -217,3 +217,29 @@ test("cards do início levam ao caso ou ao site", async ({ page }) => {
   await expect(page).toHaveURL(/\/pt\/projects\/agentgraph\/$/);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("agentgraph");
 });
+
+test("sobre sem foto, sem currículo e sem WhatsApp de contato", async ({ page }) => {
+  await abrir(page, "/pt/about/");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Sobre");
+  await expect(page.locator(".l-traj > li")).toHaveCount(5);
+  await expect(page.locator("img")).toHaveCount(0);
+  await expect(page.locator("main")).not.toContainText("PDF");
+  await expect(page.locator('a[href*="wa.me"]')).toHaveCount(0);
+  await expect(page.locator(".l-convite")).not.toContainText(/whatsapp/i);
+});
+
+test("404 procura com a luz", async ({ page }) => {
+  await abrir(page, "/404.html");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Nada aqui.", { useInnerText: true });
+  await expect(page.locator(".l-light")).toHaveClass(/l-busca/);
+  await expect(page).toHaveTitle("Nada aqui · Daniel Vieira");
+  await expect(page.locator(".l-eyebrow")).toContainText("404 · GET /404.html");
+});
+
+test("sobre em pt aponta a versão em inglês", async ({ page }) => {
+  await page.goto("/pt/about/");
+  await expect(page.locator('link[rel="alternate"][hreflang="en"]')).toHaveAttribute(
+    "href",
+    "https://daniel-vieira.green-grid.workers.dev/en/about/",
+  );
+});
