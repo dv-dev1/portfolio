@@ -68,7 +68,7 @@ export function Casca({ locale, site, pagina, rota, animacao = "l-sweep", childr
           <nav aria-label={ui.navegacao} className="l-sheet-nav">
             {links.map((l, i) => (
               <a key={l.id} className="l-big" href={l.href} aria-current={atual(l.id)}>
-                {l.rotulo} <span className="l-mono l-dim">{numero(i)}</span>
+                {l.rotulo} <span className="l-mono l-dim" aria-hidden="true">{numero(i)}</span>
               </a>
             ))}
           </nav>
