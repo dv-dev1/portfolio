@@ -4,7 +4,8 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { test } from "node:test";
 
-const OUT = join(import.meta.dirname, "..", "out");
+const RAIZ = join(import.meta.dirname, "..");
+const OUT = join(RAIZ, "out");
 const EMAIL = ["danielvmacedog1", "gmail.com"].join("@");
 
 const proibidos: [string, RegExp][] = [
@@ -44,13 +45,25 @@ test("out/ tem páginas", () => {
   assert.ok(paginas().length > 0);
 });
 
+// O robô edita content/*.ts: um termo num comentário ou num campo que não renderiza iria ao PR público. Sem <script> no fonte, a janela de dígitos usa o texto inteiro.
+const fontes = ["content/pt.ts", "content/en.ts"];
+
 test("nenhuma página publica termo proibido nem sigiloso", () => {
   const problemas: string[] = [];
-  for (const arquivo of paginas()) {
-    const texto = readFileSync(join(OUT, arquivo), "utf8");
+  const alvos = [
+    ...paginas().map((f): [string, string, string] => {
+      const texto = readFileSync(join(OUT, f), "utf8");
+      return [f, texto, semScripts(f, texto)];
+    }),
+    ...fontes.map((f): [string, string, string] => {
+      const texto = readFileSync(join(RAIZ, f), "utf8");
+      return [f, texto, texto];
+    }),
+  ];
+  for (const [arquivo, texto, numeros] of alvos) {
     for (const [nome, padrao] of proibidos) if (padrao.test(texto)) problemas.push(`${arquivo}: ${nome}`);
     if (texto.toLowerCase().includes(EMAIL)) problemas.push(`${arquivo}: e-mail inteiro`);
-    for (const c of candidatos(texto, semScripts(arquivo, texto))) {
+    for (const c of candidatos(texto, numeros)) {
       const rotulo = sigilosos.get(sha256(c));
       if (rotulo) problemas.push(`${arquivo}: ${rotulo}`);
     }

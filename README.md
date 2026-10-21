@@ -23,12 +23,13 @@ A client name under NDA or the full e-mail never reach the published HTML: the b
 
 ## Why
 
-A portfolio goes stale the week after it ships, and one that names a client under NDA breaks the NDA in public. Here every project comes from a public repository tagged `portfolio`, a bot proposes changes every Monday as a pull request, and nothing goes live until the content guard and the end-to-end tests pass on `main`.
+A portfolio goes stale the week after it ships, and one that names a client under NDA breaks the NDA in public. Here every open-source project comes from a public repository tagged `portfolio`, a bot proposes changes every Monday as a pull request, and nothing goes live until the content guard and the end-to-end tests pass on `main`.
 
 ```mermaid
 flowchart LR
-    R[repos with topic portfolio] --> B[Monday bot]
-    B --> PR[pull request on content/pt.ts and content/en.ts]
+    R[repos with topic portfolio] --> B[Monday job 1 - the model only reads and edits the texts]
+    B --> V[job 2 - no model, runs parity and the guard]
+    V --> PR[pull request on content/pt.ts and content/en.ts]
     PR --> D{Daniel merges?}
     D -- no --> X[nothing changes]
     D -- yes --> CI[CI: types, lint, build, guard, e2e]
@@ -103,8 +104,8 @@ Node 26 runs the `.ts` tests directly, with no build step for them.
 | `components/Lanterna.tsx` | the flashlight: two radial gradients that follow `--lx` and `--ly` |
 | `components/TraceAoVivo.tsx` | reads `/cdn-cgi/trace` in the visitor's browser and keeps four fields |
 | `components/Email.tsx` | joins the e-mail address only after hydration |
-| `tests/conteudo.test.ts` | scans every `out/**/*.{html,txt}` for forbidden and NDA terms |
-| `.github/workflows/update-portfolio.yml` | the Monday bot that opens the pull request |
+| `tests/conteudo.test.ts` | scans every `out/**/*.{html,txt}` and the sources `content/pt.ts` and `content/en.ts` for forbidden and NDA terms |
+| `.github/workflows/update-portfolio.yml` | the Monday bot: one job where the model only reads, another without the model that validates and opens the pull request |
 
 ```ts
 // components/TraceAoVivo.tsx
@@ -134,7 +135,7 @@ sequenceDiagram
 ## The trap
 
 > [!WARNING]
-> A content guard in a public repository cannot list what it protects: `assert(!html.includes("client name"))` publishes the name it hides. The client name, its acronym and a piece of the phone number are stored as SHA-256 hashes, and the guard hashes every word, every pair of words and every 5-digit window of the built pages' visible HTML.
+> A content guard in a public repository cannot list what it protects: `assert(!html.includes("client name"))` publishes the name it hides. The client name, its acronym and a piece of the phone number are stored as SHA-256 hashes, and the guard hashes every word, every pair of words and every 5-digit window of the built pages' visible HTML and of the `content/` sources.
 
 `/cdn-cgi/trace` only exists behind Cloudflare. Locally and in the end-to-end tests the request gets a 404 and the box says "sample"; the tests mock the route to cover the live case.
 

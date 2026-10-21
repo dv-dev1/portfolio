@@ -5,13 +5,14 @@ on:
     - cron: "0 12 * * 1" # segunda, 9h em Brasília (UTC−3, sem horário de verão)
   workflow_dispatch:
 
-permissions:
-  contents: write
-  pull-requests: write
-  id-token: write
+permissions: {}
 
 jobs:
-  atualizar:
+  # O modelo roda sem permissão de escrita e sem tests/ editável depois dele: quem valida e abre o PR é outro job.
+  ler:
+    permissions:
+      contents: read
+      pull-requests: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -60,11 +61,36 @@ jobs:
             7. Nunca invente número, cliente ou resultado. Nunca escreva telefone, número de WhatsApp, e-mail, nome de cliente, "acurácia", "accuracy", "AWS API Gateway", "ECS" nem "CAIXA", mesmo que apareçam num README.
             8. Depois de editar, rode npx next typegen e npx tsc --noEmit e corrija até passar.
             9. Se nada mudou, não edite arquivo nenhum e termine dizendo "nada mudou".
+      - uses: actions/upload-artifact@v7
+        with:
+          name: content
+          path: |
+            content/pt.ts
+            content/en.ts
+
+  pr:
+    needs: ler
+    permissions:
+      contents: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 26
+          cache: npm
+      - run: npm ci
+      # Os dois arquivos ficam sob content/, então o artefato guarda só pt.ts e en.ts, sem a pasta.
+      - uses: actions/download-artifact@v8
+        with:
+          name: content
+          path: content
       - name: Validar
         run: npx next typegen && npx tsc --noEmit && npm run build && node --test --test-reporter=tap tests/
       - name: Abrir ou atualizar o PR
         id: pr
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         with:
           branch: bot/atualizar-portfolio
           delete-branch: true
