@@ -16,22 +16,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v7
         with:
           node-version: 26
           cache: npm
       - run: npm ci
-      # O Daniel pode ter corrigido o texto no PR aberto; sem isto o robô partiria da main e apagaria a correção.
+      # O PR guarda a correção do Daniel; PR velho (sem a main atual) reverteria edição nova da main, então só parte dele se contém a main.
       - name: Partir do PR aberto
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           if [ "$(gh pr view bot/atualizar-portfolio --json state --jq .state 2>/dev/null)" = "OPEN" ]; then
             git fetch origin bot/atualizar-portfolio
-            git checkout FETCH_HEAD -- content/pt.ts content/en.ts
+            if git merge-base --is-ancestor HEAD FETCH_HEAD; then
+              git checkout FETCH_HEAD -- content/pt.ts content/en.ts
+            fi
           fi
       - name: Robô lê os repositórios
-        uses: anthropics/claude-code-action@v1
+        uses: anthropics/claude-code-action@a5a423f75c251dcbff8a74e99f83b2cb03c72bfa # v1.0.256
         env:
           GH_TOKEN: ${{ github.token }}
         with:
@@ -39,12 +43,12 @@ jobs:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           claude_args: >-
             --model claude-sonnet-5-5 --max-turns 40
-            --allowedTools "Read,Edit,Glob,Grep,Bash(gh api:*),Bash(gh repo view:*),Bash(npx next typegen),Bash(npx tsc --noEmit)"
+            --allowedTools "Read,Edit(content/pt.ts),Edit(content/en.ts),Glob,Grep,Bash(gh api:*),Bash(gh repo view:*),Bash(npx next typegen),Bash(npx tsc --noEmit)"
           prompt: |
             Você atualiza a lista de projetos do portfólio de Daniel Vieira. Trabalhe só em content/pt.ts e content/en.ts.
 
             1. Liste os repositórios públicos de dv-dev1 com a topic portfolio:
-               gh api "search/repositories?q=user:dv-dev1+topic:portfolio&per_page=100" --jq '.items[] | {name, description, html_url, homepage, fork, created_at}'
+               gh api "search/repositories?q=user:dv-dev1+topic:portfolio+fork:true&per_page=100" --jq '.items[] | {name, description, html_url, homepage, fork, created_at}'
             2. Compare com projetos.lista de content/pt.ts pelo campo repo (https://github.com/dv-dev1/<nome>).
             3. Para cada repositório que ainda não está na lista, leia o README:
                gh api repos/dv-dev1/<nome>/readme -H "Accept: application/vnd.github.raw+json"
@@ -103,7 +107,7 @@ jobs:
           path: content
       - name: Abrir ou atualizar o PR
         id: pr
-        uses: peter-evans/create-pull-request@v8
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
           branch: bot/atualizar-portfolio
           delete-branch: true

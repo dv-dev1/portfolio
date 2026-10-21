@@ -3,7 +3,7 @@
 # portfolio
 
 **Daniel Vieira's portfolio: a black page lit by a flashlight that follows your pointer, in Portuguese and English.**<br />
-A client name under NDA or the full e-mail never reach the published HTML: the build fails first.
+A client name under NDA or the full e-mail never reach the published HTML: CI stops before the deploy.
 
 [![CI](https://github.com/dv-dev1/portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/dv-dev1/portfolio/actions/workflows/ci.yml)
 ![Next.js](https://img.shields.io/badge/Next.js-16.4-000000?logo=nextdotjs&logoColor=white)
@@ -48,7 +48,7 @@ The guard catching a forbidden word pasted into the About page:
 $ npm run build && node --test --test-reporter=tap tests/
 not ok 2 - nenhuma página publica termo proibido nem sigiloso
   ---
-  duration_ms: 81.131041
+  duration_ms: 91.521541
   type: 'test'
   failureType: 'testCodeFailure'
   error: |-
@@ -73,8 +73,8 @@ not ok 2 - nenhuma página publica termo proibido nem sigiloso
     2: 'pt/about/index.html: acurácia'
     3: 'pt/about/index.txt: acurácia'
     4: 'content/pt.ts: acurácia'
-# tests 4
-# pass 3
+# tests 5
+# pass 4
 # fail 1
 ```
 

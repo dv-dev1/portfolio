@@ -34,6 +34,15 @@ function candidatos(texto: string, numeros: string): Set<string> {
   return saida;
 }
 
+function sigilososEm(texto: string, numeros: string, mapa = sigilosos): string[] {
+  const achados: string[] = [];
+  for (const c of candidatos(texto, numeros)) {
+    const rotulo = mapa.get(sha256(c));
+    if (rotulo) achados.push(rotulo);
+  }
+  return achados;
+}
+
 // Nome de chunk em hex dentro de <script> e do .txt tem 5 dígitos seguidos e daria falso positivo.
 const semScripts = (arquivo: string, texto: string) =>
   arquivo.endsWith(".html") ? texto.replace(/<script[\s\S]*?<\/script>/gi, " ") : "";
@@ -63,10 +72,17 @@ test("nenhuma página publica termo proibido nem sigiloso", () => {
   for (const [arquivo, texto, numeros] of alvos) {
     for (const [nome, padrao] of proibidos) if (padrao.test(texto)) problemas.push(`${arquivo}: ${nome}`);
     if (texto.toLowerCase().includes(EMAIL)) problemas.push(`${arquivo}: e-mail inteiro`);
-    for (const c of candidatos(texto, numeros)) {
-      const rotulo = sigilosos.get(sha256(c));
-      if (rotulo) problemas.push(`${arquivo}: ${rotulo}`);
-    }
+    for (const rotulo of sigilososEm(texto, numeros)) problemas.push(`${arquivo}: ${rotulo}`);
   }
   assert.deepEqual(problemas, []);
+});
+
+// Mapa sintético: o teste da guarda não pode depender dos termos reais, que só existem como hash.
+test("a guarda acha o par de palavras e a janela de 5 dígitos", () => {
+  const mapa = new Map([
+    [sha256("acme saúde"), "par"],
+    [sha256("91234"), "fone"],
+  ]);
+  assert.deepEqual(sigilososEm("Clínica ACME Saúde", "fone 8191234567", mapa), ["par", "fone"]);
+  assert.deepEqual(sigilososEm("acme e saúde", "9123", mapa), []);
 });
