@@ -1,0 +1,9 @@
+{
+  "name": "daniel-vieira",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./out",
+    // Endereço desconhecido recebe out/404.html com status 404 (R9, item 7).
+    "not_found_handling": "404-page"
+  }
+}
