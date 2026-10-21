@@ -15,13 +15,18 @@ function Saida({ linhas, base }: { linhas: LinhaTerminal[]; base: number }) {
 
 export function DemoAgentgraph({ textos }: { textos: TextosDemo }) {
   const [aprovado, setAprovado] = useState(false);
+  const [rodada, setRodada] = useState(0);
   const ultimo = textos.nos.length - 1;
   // Pausado no penúltimo nó, o feixe percorreu 6 dos 7 trechos entre os 8 nós.
   const progresso = aprovado ? "100%" : `${(((ultimo - 1) / ultimo) * 100).toFixed(1)}%`;
+  const rodar = () => {
+    if (aprovado) setRodada(rodada + 1);
+    setAprovado(!aprovado);
+  };
 
   return (
     <>
-      <div className="l-graph">
+      <div className="l-graph" key={`g${rodada}`}>
         <div className="l-gline">
           <span className="l-gprog" style={{ width: progresso }} />
         </div>
@@ -45,12 +50,12 @@ export function DemoAgentgraph({ textos }: { textos: TextosDemo }) {
           })}
         </ol>
       </div>
-      <div className="l-term" role="log" aria-label={textos.rotuloLog}>
+      <div className="l-term" key={`t${rodada}`} role="log" aria-label={textos.rotuloLog}>
         <Saida linhas={textos.run} base={0.1} />
         {aprovado && <Saida linhas={textos.resume} base={0.05} />}
       </div>
       <div className="l-demo-acoes">
-        <button type="button" className="l-btn l-btn-mono" onClick={() => setAprovado(!aprovado)}>
+        <button type="button" className="l-btn l-btn-mono" onClick={rodar}>
           {aprovado ? textos.deNovo : textos.aprovar}
         </button>
         <span className="l-mono l-dim">{aprovado ? textos.notaDeNovo : textos.notaAprovar}</span>

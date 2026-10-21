@@ -203,6 +203,11 @@ test("demo do agentgraph pausa e retoma", async ({ page }) => {
   await expect(log).toContainText("credit of R$ 40.000,00 released");
   await expect(log.locator(".l-say").last()).toHaveText("OK");
   await expect(page.getByRole("button", { name: "rodar de novo" })).toBeVisible();
+  await log.locator(".l-tl").first().evaluate((el) => el.setAttribute("data-velho", ""));
+  await page.getByRole("button", { name: "rodar de novo" }).click();
+  await expect(log).not.toContainText("released");
+  // Nó novo no DOM é o que reinicia a animação; o mesmo nó só mudaria de texto.
+  await expect(log.locator(".l-tl").first()).not.toHaveAttribute("data-velho");
 });
 
 test("cards do início levam ao caso ou ao site", async ({ page }) => {
