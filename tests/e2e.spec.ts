@@ -6,6 +6,8 @@ async function abrir(page: Page, url: string) {
   await expect(page.locator("html[data-hidratado]")).toBeAttached();
 }
 
+const EMAIL = ["danielvmacedog1", "gmail.com"].join("@");
+
 test.describe("raiz em inglês", () => {
   test.use({ locale: "en-US" });
   test("raiz com en-US vai para /en/", async ({ page }) => {
@@ -79,4 +81,81 @@ test.describe("celular", () => {
     await expect(menu).toBeHidden();
     await expect(page).toHaveURL(/#contato$/);
   });
+});
+
+test.describe("movimento reduzido", () => {
+  test.use({ reducedMotion: "reduce" });
+  test("títulos acesos, feixe parado e lanterna fora", async ({ page }) => {
+    await abrir(page, "/pt/");
+    await expect(page.locator("h1")).toHaveCSS("color", "rgb(230, 225, 217)");
+    await expect(page.locator(".l-beam")).toHaveCSS("animation-name", "none");
+    await expect(page.locator(".l-light")).toBeHidden();
+  });
+});
+
+test("com cursor, o título começa apagado", async ({ page }) => {
+  await abrir(page, "/pt/");
+  await expect(page.locator("h1")).toHaveCSS("color", "rgb(94, 94, 94)");
+});
+
+test.describe("trace da borda", () => {
+  const caixa = (page: Page) => page.locator("[data-trace]");
+
+  test("sem /cdn-cgi/trace, a caixa mostra exemplo", async ({ page }) => {
+    await abrir(page, "/pt/");
+    await expect(caixa(page)).toHaveAttribute("data-trace", "exemplo");
+    await expect(caixa(page)).toContainText("GET /cdn-cgi/trace · exemplo");
+    await expect(page.locator(".l-trace")).toContainText("colo=GRU");
+  });
+
+  test("com a borda simulada, mostra GIG ao vivo e nunca o IP", async ({ page }) => {
+    await page.route("**/cdn-cgi/trace", (rota) =>
+      rota.fulfill({
+        status: 200,
+        contentType: "text/plain",
+        body: "fl=29f114\nh=localhost\nip=203.0.113.9\nts=1761000000.000\nvisit_scheme=https\ncolo=GIG\nhttp=http/2\nloc=PT\ntls=TLSv1.3\n",
+      }),
+    );
+    await abrir(page, "/pt/");
+    await expect(caixa(page)).toHaveAttribute("data-trace", "vivo");
+    await expect(caixa(page)).toContainText("ao vivo");
+    await expect(page.locator(".l-trace")).toContainText("colo=GIG");
+    await expect(page.locator("#caminho")).toContainText("GIG · PoP mais perto de você");
+    await expect(page.locator("body")).not.toContainText("203.0.113.9");
+    await expect(page.locator(".l-trace")).not.toContainText("ip=");
+  });
+
+  test("trace 200 que não é trace continua exemplo", async ({ page }) => {
+    await page.route("**/cdn-cgi/trace", (rota) =>
+      rota.fulfill({ status: 200, contentType: "text/html", body: "<!doctype html>\n<title>oi</title>\ncolo=<b>nada</b>\n" }),
+    );
+    await abrir(page, "/pt/");
+    await expect(caixa(page)).toHaveAttribute("data-trace", "exemplo");
+  });
+});
+
+test("e-mail só existe depois do carregamento", async ({ page }) => {
+  const html = await (await page.request.get("/pt/")).text();
+  expect(html).not.toContain(EMAIL);
+  await abrir(page, "/pt/");
+  await expect(page.getByRole("link", { name: EMAIL })).toHaveAttribute("href", `mailto:${EMAIL}`);
+});
+
+test.describe("copiar e-mail", () => {
+  test.use({ permissions: ["clipboard-read", "clipboard-write"] });
+  test("copiar e-mail vira copiado e põe o endereço na área de transferência", async ({ page }) => {
+    await abrir(page, "/pt/");
+    await page.getByRole("button", { name: "copiar e-mail" }).click();
+    await expect(page.getByRole("button", { name: "copiado ✓" })).toBeVisible();
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(EMAIL);
+  });
+});
+
+test("copiar sem área de transferência avisa", async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "clipboard", { value: { writeText: () => Promise.reject(new Error("negado")) } });
+  });
+  await abrir(page, "/pt/");
+  await page.getByRole("button", { name: "copiar e-mail" }).click();
+  await expect(page.getByRole("button", { name: "copie manualmente" })).toBeVisible();
 });
