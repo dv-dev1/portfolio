@@ -66,12 +66,12 @@ export default async function Caso() {
   const proximo = lista.slice(i + 1).find((p) => destino(p, locale));
 
   return (
-    <Casca locale={locale} site={site} pagina="projetos" rota={`projects/${c.slug}/`}>
+    <Casca locale={locale} site={site} pagina="caso" rota={`projects/${c.slug}/`}>
       <main className="p-caso">
         <article>
           <section className="l-wrap l-topo">
             <nav aria-label={c.trilhaRotulo} className="l-mono l-dim l-trilha">
-              <a className="l-link" href={`/${locale}/projects/`}>
+              <a className="l-link" href={`/${locale}/#projetos`}>
                 {c.trilha}
               </a>{" "}
               / {c.titulo}
@@ -164,7 +164,7 @@ export default async function Caso() {
 
           <nav aria-label={c.outros} className="l-wrap">
             <div className="l-next">
-              <a className="l-nx" href={`/${locale}/projects/`}>
+              <a className="l-nx" href={`/${locale}/#projetos`}>
                 <span className="l-mono l-dim">{c.voltar}</span>
                 <span className="l-t l-nxt">{c.todos}</span>
               </a>

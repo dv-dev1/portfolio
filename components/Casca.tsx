@@ -5,7 +5,7 @@ import { Lanterna } from "./Lanterna";
 import { MenuCelular } from "./MenuCelular";
 import { numero } from "./Texto";
 
-type Pagina = "inicio" | "projetos" | "sobre" | "404";
+type Pagina = "inicio" | "caso" | "404";
 
 type Props = {
   locale: Locale;
@@ -41,19 +41,20 @@ function Idiomas({ locale, rota, rotulo }: { locale: Locale; rota: string; rotul
 
 export function Casca({ locale, site, pagina, rota, animacao = "l-sweep", children }: Props) {
   const { ui } = site;
+  const base = pagina === "inicio" ? "" : `/${locale}/`;
   const links = [
-    { id: "inicio", rotulo: ui.inicio, href: `/${locale}/` },
-    { id: "projetos", rotulo: ui.projetos, href: `/${locale}/projects/` },
-    { id: "sobre", rotulo: ui.sobre, href: `/${locale}/about/` },
-    // O contato mora no rodapé do Início: lá é âncora local, nas outras páginas leva ao Início.
-    { id: "contato", rotulo: ui.contato, href: pagina === "inicio" ? "#contato" : `/${locale}/#contato` },
+    { id: "inicio", rotulo: ui.inicio, href: `${base}#topo` },
+    { id: "projetos", rotulo: ui.projetos, href: `${base}#projetos` },
+    { id: "sobre", rotulo: ui.sobre, href: `${base}#sobre` },
+    { id: "contato", rotulo: ui.contato, href: `${base}#contato` },
   ];
-  const atual = (id: string) => (id === pagina ? "page" : undefined);
+  // No Início quem marca o link é SecaoAtiva, conforme a rolagem; o HTML sai sem marca.
+  const atual = (id: string) => (pagina === "caso" && id === "projetos" ? "page" : undefined);
 
   return (
     <>
       <header className="l-wrap l-nav">
-        <a href={`/${locale}/`} className="l-link l-mono l-marca">
+        <a href={pagina === "inicio" ? "#topo" : `/${locale}/`} className="l-link l-mono l-marca">
           daniel vieira
         </a>
         <nav aria-label={ui.navegacao} className="l-nav-links">

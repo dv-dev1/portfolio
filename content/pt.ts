@@ -83,7 +83,6 @@ export type Site = {
     filtroRotulo: string;
     filtros: { id: Area | "todos"; rotulo: string }[];
     lista: Project[];
-    github: string;
   };
   caso: {
     slug: string;
@@ -116,9 +115,6 @@ export type Site = {
     stack: { nome: string; itens: string[] }[];
     colunasRotulo: string;
     colunas: { titulo: string; itens: Rotulado[] }[];
-    convite: string;
-    conviteNota: string;
-    voltar: string;
   };
   naoEncontrada: { aba: string; eyebrow: string; titulo: string; texto: string; inicio: string; projetos: string };
 };
@@ -376,7 +372,6 @@ export const site: Site = {
         repo: gh("vox"),
       },
     ],
-    github: "todos os repositórios no GitHub ↗",
   },
   caso: {
     slug: "agentgraph",
@@ -548,9 +543,6 @@ export const site: Site = {
         ],
       },
     ],
-    convite: "Acenda uma conversa",
-    conviteNota: "e-mail · linkedin →",
-    voltar: "voltar à trajetória ↑",
   },
   naoEncontrada: {
     aba: "Nada aqui · Daniel Vieira",

@@ -218,7 +218,6 @@ export const site: Site = {
         repo: gh("vox"),
       },
     ],
-    github: "all repositories on GitHub ↗",
   },
   caso: {
     slug: "agentgraph",
@@ -390,9 +389,6 @@ export const site: Site = {
         ],
       },
     ],
-    convite: "Spark a conversation",
-    conviteNota: "e-mail · linkedin →",
-    voltar: "back to career ↑",
   },
   naoEncontrada: {
     aba: "Nothing here · Daniel Vieira",

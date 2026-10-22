@@ -1,18 +1,25 @@
+import Image from "next/image";
 import { Casca } from "@/components/Casca";
 import { CopiarEmail, EmailLink } from "@/components/Email";
+import { ListaProjetos } from "@/components/ListaProjetos";
 import { Relogio } from "@/components/Relogio";
+import { SecaoAtiva } from "@/components/SecaoAtiva";
 import { Linhas, Rico, numero } from "@/components/Texto";
 import { TraceAoVivo } from "@/components/TraceAoVivo";
+import foto from "@/content/foto.webp";
 import { destino, getLocale, getSite } from "@/content/i18n";
 import { perfis } from "@/content/locales";
 
 export default async function Inicio() {
   const [site, locale] = await Promise.all([getSite(), getLocale()]);
   const t = site.inicio;
+  const proj = site.projetos;
+  const s = site.sobre;
   const destaques = t.destaques.flatMap((d) => {
     const p = site.projetos.lista.find((x) => x.slug === d.slug);
     return p ? [{ ...d, nome: p.nome, href: destino(p, locale), caso: p.slug === site.caso.slug }] : [];
   });
+  const lista = proj.lista.map((x) => ({ ...x, href: destino(x, locale) }));
 
   return (
     <Casca locale={locale} site={site} pagina="inicio" rota="">
@@ -27,7 +34,7 @@ export default async function Inicio() {
               <Rico p={t.lead} />
             </p>
             <div className="l-acoes">
-              <a className="l-btn" href={`/${locale}/projects/`}>
+              <a className="l-btn" href="#projetos">
                 {t.verProjetos}
               </a>
               <a className="l-btn" href="#caminho">
@@ -71,7 +78,7 @@ export default async function Inicio() {
             <h2 className="l-t l-h2">
               <Linhas texto={t.selecionados} />
             </h2>
-            <a className="l-link l-mono l-mais" href={`/${locale}/projects/`}>
+            <a className="l-link l-mono l-mais" href="#lista">
               {t.todos}
             </a>
           </div>
@@ -95,6 +102,14 @@ export default async function Inicio() {
               </a>
             ))}
           </div>
+          <div id="lista" className="l-todos">
+            <p className="l-mono l-dim l-eyebrow">{proj.eyebrow.replace("{n}", String(proj.lista.length))}</p>
+            <ListaProjetos lista={lista} filtros={proj.filtros} rotulo={proj.filtroRotulo}>
+              <p className="l-lead">
+                <Rico p={proj.lead} />
+              </p>
+            </ListaProjetos>
+          </div>
         </section>
 
         <section id="caminho" className="l-wrap l-sec">
@@ -105,6 +120,89 @@ export default async function Inicio() {
             <p className="l-caminho-texto">{t.caminho.texto}</p>
           </div>
           <TraceAoVivo textos={t.caminho} commit={process.env.COMMIT ?? "local"} />
+        </section>
+
+        <section id="sobre" aria-labelledby="h-sobre">
+          <div className="l-wrap l-sec">
+            <p className="l-mono l-dim l-eyebrow">{s.eyebrow}</p>
+            <h2 id="h-sobre" className="l-t l-h2">
+              {s.titulo}
+            </h2>
+            <div className="l-intro">
+              <div className="l-intro-texto">
+                {s.paragrafos.map((par, i) => (
+                  <p key={i} className="l-p">
+                    <Rico p={par} />
+                  </p>
+                ))}
+                <div className="l-acoes">
+                  <a className="l-btn" href={perfis.linkedin}>
+                    {s.linkedin}
+                  </a>
+                </div>
+              </div>
+              <Image className="l-foto" src={foto} alt={s.fotoAlt} />
+            </div>
+          </div>
+
+          <section className="l-wrap l-sec" aria-labelledby="h-traj">
+            <h3 id="h-traj" className="l-t l-h2">
+              {s.trajetoria}
+            </h3>
+            <ol className="l-traj">
+              {s.empregos.map((j, i) => (
+                <li key={j.org} className="l-job">
+                  <span className="l-when l-mono">{j.quando}</span>
+                  <span className="l-dot" style={{ animationDelay: `${(i * 1.1).toFixed(1)}s` }} aria-hidden="true" />
+                  <div>
+                    <h4 className="l-t l-org">{j.org}</h4>
+                    <p className="l-role l-mono l-dim">{j.papel}</p>
+                    <ul className="l-bul">
+                      {j.itens.map((it) => (
+                        <li key={it}>{it}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </section>
+
+          <section className="l-wrap l-ferramentas" aria-labelledby="h-stack">
+            <h3 id="h-stack" className="l-t l-h2">
+              {s.ferramentas}
+            </h3>
+            <div className="l-stack">
+              {s.stack.map((g) => (
+                <div key={g.nome} className="l-group">
+                  <h4 className="l-mono l-dim">{g.nome}</h4>
+                  <div className="l-tags">
+                    {g.itens.map((it) => (
+                      <span key={it} className="l-tag">
+                        {it}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section className="l-wrap l-sec" aria-label={s.colunasRotulo}>
+            <div className="l-cols">
+              {s.colunas.map((c) => (
+                <div key={c.titulo} className="l-col">
+                  <h4 className="l-mono l-dim">{c.titulo}</h4>
+                  {c.itens.map((it) => (
+                    <p key={it.k} className="l-item">
+                      <b>{it.k}</b>
+                      {it.v}
+                    </p>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </section>
         </section>
       </main>
 
@@ -134,6 +232,7 @@ export default async function Inicio() {
           </div>
         </div>
       </footer>
+      <SecaoAtiva />
     </Casca>
   );
 }

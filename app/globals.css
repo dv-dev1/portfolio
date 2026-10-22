@@ -41,12 +41,18 @@ body{margin:0;overflow-x:hidden;background:var(--preto);color:var(--texto);font-
 .l-dim{color:var(--dim)}
 .l-link{color:var(--texto);text-decoration:none;transition:color .3s}
 .l-marca{color:var(--marca)}
-.l-link:hover,.l-link[aria-current="page"]{color:var(--aceso)}
+.l-link:hover,.l-link[aria-current]{color:var(--aceso)}
 .l-nav{display:flex;justify-content:space-between;align-items:center;gap:24px;height:76px}
 .l-nav-links{display:flex;gap:32px;font-size:15px}
 .l-nav-links .l-link{position:relative}
 .l-nav-links .l-link::after{content:"";position:absolute;left:0;right:0;bottom:-3px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .35s cubic-bezier(.32,.72,0,1)}
-.l-nav-links .l-link:hover::after,.l-nav-links .l-link[aria-current="page"]::after{transform:none}
+.l-nav-links .l-link:hover::after,.l-nav-links .l-link[aria-current]::after{transform:none}
+/* Menu preso no topo; o fundo vaza para os lados, senão o conteúdo apareceria fora dos 1280px do .l-wrap. */
+header.l-nav{position:sticky;top:0;z-index:20;background:var(--preto);box-shadow:0 0 0 100vmax var(--preto);clip-path:inset(0 -100vmax)}
+/* 76px é a altura do cabeçalho, na mesma unidade (com ou sem o zoom de 80%) das seções que ele cobre. */
+section[id],footer[id],#lista{scroll-margin-top:76px}
+.l-todos{margin-top:96px}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
 .l-lang{display:flex;gap:6px;align-items:center}
 .l-lang a,.l-lang [aria-current]{display:inline-flex;align-items:center;justify-content:center;min-height:32px;padding:0 6px;color:var(--dim);text-decoration:none}
 .l-lang a:hover,.l-lang [aria-current]{color:var(--aceso)}
@@ -136,7 +142,6 @@ a.l-contact:hover{color:var(--aceso)}
 .l-copy:hover{border-color:var(--aceso);color:var(--aceso)}
 .l-foot-contato .l-colophon{margin-top:72px}
 
-.l-proj-head{margin-top:48px}
 .l-proj-head .l-lead{max-width:520px;font-size:18px}
 .l-chips{display:flex;flex-wrap:wrap;gap:8px}
 .l-chip{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border:1px solid var(--borda);border-radius:999px;background:var(--preto);color:var(--texto);font:inherit;font-size:14px;cursor:pointer;transition:border-color .3s,color .3s}
@@ -220,15 +225,12 @@ a.l-row:hover .l-arrow{transform:translateX(6px);color:var(--aceso)}
 .l-ferramentas{padding-top:64px}
 .l-stack{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;margin-top:40px}
 .l-group{padding-top:20px;border-top:1px solid var(--linha)}
-.l-group h3{margin:0 0 16px;font-weight:400}
+.l-group h4{margin:0 0 16px;font-weight:400}
 .l-cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:40px}
 .l-col{padding-top:20px;border-top:1px solid var(--linha)}
-.l-col h3{margin:0 0 18px;font-weight:400}
+.l-col h4{margin:0 0 18px;font-weight:400}
 .l-item{margin:0 0 18px}
 .l-item b{display:block;margin-bottom:4px;font-weight:500;font-size:17px;color:var(--claro)}
-.l-convite{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:24px;margin-top:96px;padding:56px 0;border-top:1px solid var(--linha);border-bottom:1px solid var(--linha);text-decoration:none}
-.l-convite:hover .l-convite-t{color:var(--aceso)}
-.l-convite-t{font-weight:600;font-size:clamp(28px,3.4vw,44px);letter-spacing:-.045em;line-height:1;transition:color .3s}
 
 .p-404{min-height:calc(100svh - 76px);display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:96px}
 .p-404 .l-h1{font-size:clamp(56px,8vw,120px);line-height:.84}

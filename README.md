@@ -42,13 +42,13 @@ flowchart LR
 
 ## See it
 
-The guard catching a forbidden word pasted into the About page:
+The guard catching a forbidden word pasted into the About section:
 
 ```
 $ npm run build && node --test --test-reporter=tap tests/
 not ok 2 - nenhuma página publica termo proibido nem sigiloso
   ---
-  duration_ms: 91.521541
+  duration_ms: 79.437083
   type: 'test'
   failureType: 'testCodeFailure'
   error: |-
@@ -56,10 +56,10 @@ not ok 2 - nenhuma página publica termo proibido nem sigiloso
     + actual - expected
 
     + [
-    +   'pt/about/__next.$d$lang.about.__PAGE__.txt: acurácia',
-    +   'pt/about/__next._full.txt: acurácia',
-    +   'pt/about/index.html: acurácia',
-    +   'pt/about/index.txt: acurácia',
+    +   'pt/__next.$d$lang.__PAGE__.txt: acurácia',
+    +   'pt/__next._full.txt: acurácia',
+    +   'pt/index.html: acurácia',
+    +   'pt/index.txt: acurácia',
     +   'content/pt.ts: acurácia'
     + ]
     - []
@@ -68,10 +68,10 @@ not ok 2 - nenhuma página publica termo proibido nem sigiloso
   name: 'AssertionError'
   expected:
   actual:
-    0: 'pt/about/__next.$d$lang.about.__PAGE__.txt: acurácia'
-    1: 'pt/about/__next._full.txt: acurácia'
-    2: 'pt/about/index.html: acurácia'
-    3: 'pt/about/index.txt: acurácia'
+    0: 'pt/__next.$d$lang.__PAGE__.txt: acurácia'
+    1: 'pt/__next._full.txt: acurácia'
+    2: 'pt/index.html: acurácia'
+    3: 'pt/index.txt: acurácia'
     4: 'content/pt.ts: acurácia'
 # tests 5
 # pass 4
@@ -100,7 +100,8 @@ Node 26 runs the `.ts` tests directly, with no build step for them.
 
 | File | Role |
 |---|---|
-| `app/[lang]/` | builds `/pt/` and `/en/` at build time; pages read the language with `next/root-params` |
+| `app/[lang]/` | builds `/pt/` and `/en/` at build time, each one the whole site on one page; `/projects/` and `/about/` only redirect to its sections; pages read the language with `next/root-params` |
+| `components/SecaoAtiva.tsx` | an IntersectionObserver marks the menu link of the section on screen |
 | `public/index.html` | sends `/` to `/pt/` or `/en/` by the browser language; without JavaScript, to `/en/` |
 | `content/pt.ts`, `content/en.ts` | every text on the site, typed by `Site` |
 | `components/Lanterna.tsx` | the flashlight: two radial gradients that follow `--lx` and `--ly` |

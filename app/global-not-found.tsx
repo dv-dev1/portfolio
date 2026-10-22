@@ -28,7 +28,7 @@ export default function NaoEncontrada() {
                 <a className="l-btn" href="/pt/">
                   {t.inicio}
                 </a>
-                <a className="l-btn" href="/pt/projects/">
+                <a className="l-btn" href="/pt/#projetos">
                   {t.projetos}
                 </a>
               </div>

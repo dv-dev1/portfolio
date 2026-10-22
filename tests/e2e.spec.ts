@@ -161,7 +161,7 @@ test("copiar sem área de transferência avisa", async ({ page }) => {
 });
 
 test("filtro por área deixa só a área e Todos volta à lista", async ({ page }) => {
-  await abrir(page, "/pt/projects/");
+  await abrir(page, "/pt/#projetos");
   const linhas = page.locator(".l-list > li");
   const total = await linhas.count();
   const filtros = page.getByRole("group", { name: "Filtrar por área" });
@@ -176,16 +176,16 @@ test("filtro por área deixa só a área e Todos volta à lista", async ({ page 
 });
 
 test("trabalho de empresa aparece sem link e com o selo trabalho", async ({ page }) => {
-  await abrir(page, "/pt/projects/");
+  await abrir(page, "/pt/#projetos");
   const linha = page.locator(".l-list > li", { hasText: "Agendamento de exames" });
   await expect(linha).toContainText("trabalho");
   await expect(linha.locator("a")).toHaveCount(0);
 });
 
-test("idioma em projetos leva a /en/projects/", async ({ page }) => {
-  await abrir(page, "/pt/projects/");
+test("idioma numa seção leva ao início do outro idioma", async ({ page }) => {
+  await abrir(page, "/pt/#projetos");
   await page.getByRole("group", { name: "Idioma" }).getByRole("link", { name: "en" }).click();
-  await expect(page).toHaveURL(/\/en\/projects\/$/);
+  await expect(page).toHaveURL(/\/en\/$/);
 });
 
 test("idioma no caso mantém o caso", async ({ page }) => {
@@ -219,19 +219,119 @@ test("cards do início levam ao caso ou ao site", async ({ page }) => {
 });
 
 test("sobre com foto, sem currículo e sem WhatsApp de contato", async ({ page }) => {
-  await abrir(page, "/pt/about/");
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Sobre");
+  await abrir(page, "/pt/#sobre");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
+  await expect(page.getByRole("heading", { level: 2, name: "Sobre" })).toBeVisible();
   await expect(page.locator(".l-traj > li")).toHaveCount(5);
-  const foto = page.locator("img");
+  const foto = page.locator("#sobre img");
   await expect(foto).toHaveCount(1);
   await expect(foto).toHaveAttribute("alt", /Daniel Vieira/);
   await expect.poll(() => foto.evaluate((i: HTMLImageElement) => i.naturalWidth)).toBe(640);
   await expect(page.locator("main")).not.toContainText("PDF");
   await expect(page.locator('a[href*="wa.me"]')).toHaveCount(0);
-  await expect(page.locator(".l-convite")).not.toContainText(/whatsapp/i);
-  await abrir(page, "/en/about/");
-  await expect(page.locator("img")).toHaveAttribute("alt", /Daniel Vieira/);
+  await expect(page.locator(".l-convite")).toHaveCount(0);
+  await abrir(page, "/en/#sobre");
+  await expect(page.locator("#sobre img")).toHaveAttribute("alt", /Daniel Vieira/);
 });
+
+const link = (page: Page, nome: string) => page.locator(".l-nav-links").getByRole("link", { name: nome, exact: true });
+// Espera a rolagem suave parar e devolve a distância entre o fim do menu e o começo da seção: 0 é o título logo abaixo, negativo é ele escondido.
+async function folgaDoMenu(page: Page, seletor: string) {
+  let anterior = NaN;
+  await expect
+    .poll(
+      async () => {
+        const y = await page.evaluate(() => scrollY);
+        const parado = y === anterior;
+        anterior = y;
+        return parado;
+      },
+      { intervals: [250] },
+    )
+    .toBe(true);
+  return page.evaluate(
+    (sel) => document.querySelector(sel)!.getBoundingClientRect().top - document.querySelector("header.l-nav")!.getBoundingClientRect().bottom,
+    seletor,
+  );
+}
+
+test("clicar em Projetos rola na mesma página até a seção", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await abrir(page, "/pt/");
+  await page.evaluate(() => Object.assign(window, { marca: 1 }));
+  await link(page, "Projetos").click();
+  await expect(page).toHaveURL(/\/pt\/#projetos$/);
+  expect(await page.evaluate(() => "marca" in window)).toBe(true);
+  const folga = await folgaDoMenu(page, "#projetos");
+  expect(folga).toBeGreaterThanOrEqual(-1);
+  expect(folga).toBeLessThan(40);
+});
+
+test("o menu marca a seção visível", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await abrir(page, "/pt/");
+  await expect(link(page, "Início")).toHaveAttribute("aria-current", "location");
+  await link(page, "Sobre").click();
+  await expect(link(page, "Sobre")).toHaveAttribute("aria-current", "location");
+  await expect(link(page, "Início")).not.toHaveAttribute("aria-current");
+});
+
+test("em tela alta, o fim da página marca Contato", async ({ page }) => {
+  await page.setViewportSize({ width: 1920, height: 1080 });
+  await abrir(page, "/pt/");
+  await link(page, "Contato").click();
+  await expect(link(page, "Contato")).toHaveAttribute("aria-current", "location");
+  await expect(link(page, "Sobre")).not.toHaveAttribute("aria-current");
+});
+
+test("depois de rolar, o menu continua no topo da tela", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await abrir(page, "/pt/");
+  await page.evaluate(() => window.scrollTo({ top: 3000, behavior: "instant" }));
+  await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(2000);
+  const caixa = await page.locator("header.l-nav").boundingBox();
+  expect(Math.abs(caixa!.y)).toBeLessThanOrEqual(1);
+  await expect(link(page, "Sobre")).toBeInViewport();
+});
+
+test("rolagem suave por padrão", async ({ page }) => {
+  await abrir(page, "/pt/");
+  await expect(page.locator("html")).toHaveCSS("scroll-behavior", "smooth");
+});
+
+test.describe("rolagem com movimento reduzido", () => {
+  test.use({ reducedMotion: "reduce" });
+  test("a rolagem não anima", async ({ page }) => {
+    await abrir(page, "/pt/");
+    await expect(page.locator("html")).toHaveCSS("scroll-behavior", "auto");
+  });
+});
+
+test("@celular tocar em Sobre fecha o menu e leva à seção", async ({ page }) => {
+  await abrir(page, "/pt/");
+  await page.getByRole("button", { name: "Menu" }).tap();
+  const menu = page.getByRole("dialog", { name: "Menu" });
+  await menu.getByRole("link", { name: "Sobre" }).tap();
+  await expect(menu).toBeHidden();
+  await expect(page).toHaveURL(/\/pt\/#sobre$/);
+  const folga = await folgaDoMenu(page, "#sobre");
+  expect(folga).toBeGreaterThanOrEqual(-1);
+  expect(folga).toBeLessThan(40);
+});
+
+for (const [de, para] of [
+  ["/pt/projects/", "/pt/#projetos"],
+  ["/en/about/", "/en/#sobre"],
+]) {
+  test(`${de} leva à seção do início`, async ({ page, request }) => {
+    await page.goto(de);
+    await expect(page).toHaveURL(new RegExp(`${para}$`));
+    const html = await (await request.get(de)).text();
+    expect(html).toContain(`http-equiv="refresh" content="0;url=${para}"`);
+    expect(html).toMatch(/<meta name="robots" content="noindex/);
+    expect(html).toContain(`href="${para}"`);
+  });
+}
 
 test("404 procura com a luz", async ({ page }) => {
   await abrir(page, "/404.html");
@@ -241,11 +341,11 @@ test("404 procura com a luz", async ({ page }) => {
   await expect(page.locator(".l-eyebrow")).toContainText("404 · GET /404.html");
 });
 
-test("sobre em pt aponta a versão em inglês", async ({ page }) => {
-  await page.goto("/pt/about/");
+test("início em pt aponta a versão em inglês", async ({ page }) => {
+  await page.goto("/pt/");
   await expect(page.locator('link[rel="alternate"][hreflang="en"]')).toHaveAttribute(
     "href",
-    "https://daniel-vieira.green-grid.workers.dev/en/about/",
+    "https://daniel-vieira.green-grid.workers.dev/en/",
   );
 });
 
