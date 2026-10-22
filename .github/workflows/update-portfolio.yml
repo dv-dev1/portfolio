@@ -41,6 +41,7 @@ jobs:
         with:
           github_token: ${{ github.token }}
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          show_full_output: true
           claude_args: >-
             --model claude-sonnet-5-5 --max-turns 40
             --allowedTools "Read,Edit(content/pt.ts),Edit(content/en.ts),Glob,Grep,Bash(gh api:*),Bash(gh repo view:*),Bash(npx next typegen),Bash(npx tsc --noEmit)"
