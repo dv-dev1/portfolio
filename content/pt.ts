@@ -177,7 +177,7 @@ export const site: Site = {
     verProjetos: "Ver projetos",
     seguirFeixe: "Seguir o feixe ↓",
     agora: [
-      { k: "agora", v: "Smartspace · IA e dados" },
+      { k: "agora", v: "Smartspace · IA e full stack" },
       { k: "e", v: "Etros Logística · automação e IA" },
     ],
     cidade: "joão pessoa",
