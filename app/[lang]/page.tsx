@@ -179,7 +179,15 @@ export default async function Inicio() {
                   <h4 className="l-mono l-dim">{c.titulo}</h4>
                   {c.itens.map((it) => (
                     <p key={it.k} className="l-item">
-                      <b>{it.k}</b>
+                      <b>
+                        {it.href ? (
+                          <a className="l-link" href={it.href}>
+                            {it.k} ↗
+                          </a>
+                        ) : (
+                          it.k
+                        )}
+                      </b>
                       {it.v}
                     </p>
                   ))}

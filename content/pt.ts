@@ -110,7 +110,7 @@ export type Site = {
     ferramentas: string;
     stack: { nome: string; itens: string[] }[];
     colunasRotulo: string;
-    colunas: { titulo: string; itens: Rotulado[] }[];
+    colunas: { titulo: string; itens: (Rotulado & { href?: string })[] }[];
   };
   naoEncontrada: { aba: string; eyebrow: string; titulo: string; texto: string; inicio: string; projetos: string };
 };
@@ -497,8 +497,8 @@ export const site: Site = {
       {
         titulo: "certificações",
         itens: [
-          { k: "Claude Code in Action", v: "Anthropic" },
-          { k: "Introduction to Generative AI", v: "AWS Educate · ago/2025" },
+          { k: "Claude Code in Action", v: "Anthropic", href: "https://verify.skilljar.com/c/9wfpxanju3og" },
+          { k: "Introduction to Generative AI", v: "AWS Educate · ago/2025", href: "https://www.credly.com/badges/edc3bd9d-953d-49b9-9904-c69ad5dc3546/linked_in_profile" },
         ],
       },
       {

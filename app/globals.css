@@ -226,6 +226,7 @@ a.l-row:hover .l-arrow{transform:translateX(6px);color:var(--aceso)}
 .l-col h4{margin:0 0 18px;font-weight:400}
 .l-item{margin:0 0 18px}
 .l-item b{display:block;margin-bottom:4px;font-weight:500;font-size:17px;color:var(--claro)}
+.l-item a{color:inherit}
 
 .p-404{min-height:calc(100svh - 76px);display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:96px}
 .p-404 .l-h1{font-size:clamp(56px,8vw,120px);line-height:.84}

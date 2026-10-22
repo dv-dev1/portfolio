@@ -255,6 +255,20 @@ async function folgaDoMenu(page: Page, seletor: string) {
   );
 }
 
+for (const lang of ["pt", "en"]) {
+  test(`certificados levam à verificação em ${lang}`, async ({ page }) => {
+    await abrir(page, `/${lang}/#sobre`);
+    await expect(page.getByRole("link", { name: /Claude Code in Action/ })).toHaveAttribute(
+      "href",
+      "https://verify.skilljar.com/c/9wfpxanju3og",
+    );
+    await expect(page.getByRole("link", { name: /Introduction to Generative AI/ })).toHaveAttribute(
+      "href",
+      "https://www.credly.com/badges/edc3bd9d-953d-49b9-9904-c69ad5dc3546/linked_in_profile",
+    );
+  });
+}
+
 test("clicar em Projetos rola na mesma página até a seção", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await abrir(page, "/pt/");
