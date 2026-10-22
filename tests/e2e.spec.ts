@@ -273,3 +273,19 @@ for (const url of ["/en/", "/404.html"]) {
     expect(await resposta.text()).toContain("DV");
   });
 }
+
+test("no computador os títulos cabem na escala nova e as notas dos números se alinham", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await abrir(page, "/pt/");
+  const efetivo = (seletor: string) =>
+    page.locator(seletor).first().evaluate((e) => parseFloat(getComputedStyle(e).fontSize) * e.currentCSSZoom);
+  expect(await efetivo(".p-inicio .l-h1")).toBeLessThanOrEqual(96);
+  expect(await efetivo(".l-h2")).toBeLessThanOrEqual(40);
+  expect(await efetivo(".l-num")).toBeLessThanOrEqual(48);
+  expect(await efetivo(".l-contato-t")).toBeLessThanOrEqual(56);
+  const topos = await page
+    .locator(".l-nums li > :nth-child(3)")
+    .evaluateAll((els) => els.map((e) => Math.round(e.getBoundingClientRect().top)));
+  expect(topos).toHaveLength(3);
+  expect(Math.max(...topos) - Math.min(...topos)).toBeLessThanOrEqual(1);
+});
