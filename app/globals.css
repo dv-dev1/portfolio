@@ -94,11 +94,6 @@ section[id],footer[id],#lista{scroll-margin-top:76px}
 .l-now dt{color:var(--dim)}
 .l-now dd{margin:0;color:var(--suave)}
 .l-now .l-now-hora{margin-left:auto}
-.l-label{margin:0;color:var(--dim);font-weight:400}
-.l-nums{list-style:none;margin:28px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:40px;border-top:1px solid var(--linha)}
-.l-nums li{display:grid;grid-row:span 3;grid-template-rows:subgrid;gap:16px;padding-top:36px}
-.l-num{font-weight:600;font-size:clamp(36px,3.6vw,52px);line-height:.9;letter-spacing:-.05em}
-.l-nl{font-size:16px;line-height:1.5;max-width:34ch}
 .l-mais{display:inline-flex;align-items:center;min-height:44px}
 .l-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:40px}
 .l-card{display:flex;flex-direction:column;gap:18px;min-height:240px;padding:28px;border:1px solid var(--linha-card);border-radius:6px;text-decoration:none;color:var(--texto);transition:border-color .3s}
@@ -264,7 +259,7 @@ a.l-row:hover .l-arrow{transform:translateX(6px);color:var(--aceso)}
  .l-now{flex-direction:column;gap:8px}
  .l-now div{justify-content:space-between}
  .l-now .l-now-hora{margin-left:0}
- .l-nums,.l-cards{grid-template-columns:1fr}
+ .l-cards{grid-template-columns:1fr}
  .l-rail{display:none}
  .l-stations{position:relative;grid-template-columns:1fr;gap:20px;padding-left:28px}
  .l-stations::before{content:"";position:absolute;left:4px;top:6px;bottom:6px;width:1px;background:var(--linha)}

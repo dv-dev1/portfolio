@@ -58,21 +58,6 @@ export default async function Inicio() {
           </dl>
         </section>
 
-        <section className="l-wrap l-sec" aria-labelledby="h-num">
-          <h2 id="h-num" className="l-mono l-label">
-            {t.medido}
-          </h2>
-          <ul className="l-nums">
-            {t.numeros.map((n) => (
-              <li key={n.n}>
-                <span className="l-t l-num">{n.n}</span>
-                <span className="l-nl">{n.texto}</span>
-                <span className="l-mono l-dim">{n.nota}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
-
         <section id="projetos" className="l-wrap l-sec">
           <div className="l-head">
             <h2 className="l-t l-h2">
@@ -124,7 +109,6 @@ export default async function Inicio() {
 
         <section id="sobre" aria-labelledby="h-sobre">
           <div className="l-wrap l-sec">
-            <p className="l-mono l-dim l-eyebrow">{s.eyebrow}</p>
             <h2 id="h-sobre" className="l-t l-h2">
               {s.titulo}
             </h2>

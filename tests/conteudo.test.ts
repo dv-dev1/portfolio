@@ -22,6 +22,7 @@ const sigilosos = new Map([
   ["c2c627adb2826892a872eb24e0216aff4635b0d54e5ecfcfe45d69ab9df49abf", "nome do cliente sob NDA"],
   ["0832df22bfb060d436d3dc99dd4bf3d18212e1264dc3a32a8c4a65950cb139f5", "sigla do cliente sob NDA"],
   ["7a308f799cae603e9d6c76b26589c69320596f8a1ebc0dad393a2a8a6981c5f1", "trecho do telefone"],
+  ["142927fd66eaa414d87776a31a2a48c8f458954026aff51abdd8b16e2aab004a", "nome do banco cliente"],
 ]);
 
 const sha256 = (s: string) => createHash("sha256").update(s).digest("hex");

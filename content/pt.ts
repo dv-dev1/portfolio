@@ -53,7 +53,6 @@ export type Site = {
     contato: string;
     menu: string;
     fechar: string;
-    coordenadas: string;
     copyright: string;
     contatoLink: string;
     lerCaso: string;
@@ -68,8 +67,6 @@ export type Site = {
     agora: Rotulado[];
     cidade: string;
     fuso: string;
-    medido: string;
-    numeros: { n: string; texto: string; nota: string }[];
     selecionados: string;
     todos: string;
     destaques: Destaque[];
@@ -104,7 +101,6 @@ export type Site = {
     proximo: string;
   };
   sobre: {
-    eyebrow: string;
     titulo: string;
     paragrafos: Paragrafo[];
     fotoAlt: string;
@@ -169,7 +165,6 @@ export const site: Site = {
     contato: "Contato",
     menu: "Menu",
     fechar: "Fechar",
-    coordenadas: "7°07′S 34°52′W",
     copyright: "© 2026 Daniel Vieira · João Pessoa, PB",
     contatoLink: "contato →",
     lerCaso: "ler o estudo de caso →",
@@ -187,24 +182,6 @@ export const site: Site = {
     ],
     cidade: "joão pessoa",
     fuso: "UTC−3",
-    medido: "medido em produção",
-    numeros: [
-      {
-        n: "−99,3%",
-        texto: "no custo por consulta de um agente sobre 2.000+ produtos: o catálogo inteiro no prompt deu lugar a RAG com Pinecone.",
-        nota: "US$ 6,00 → US$ 0,04 · de 3 para 500 clientes/dia",
-      },
-      {
-        n: "~230",
-        texto: "marcações de exame concluídas, contra ~120 antes, nos primeiros meses após a migração: o agendamento de um hospital de grande porte saiu do n8n e foi para código.",
-        nota: "harness com policies, hooks e guardrails",
-      },
-      {
-        n: "−80%",
-        texto: "no ciclo de engenharia de bots: o protótipo no Figma vira JSON, e o JSON vira bot de produção no Botpress.",
-        nota: "design-to-bot · apresentado no TechUpdate",
-      },
-    ],
     selecionados: "Projetos\nselecionados",
     todos: "todos os projetos →",
     destaques: [
@@ -216,13 +193,13 @@ export const site: Site = {
       },
       {
         slug: "geniai-agente",
-        selo: "no ar",
+        selo: "freelance",
         desc: "Assistente de pré-vendas no WhatsApp: entende texto e áudio, faz a triagem e passa o lead ao especialista. Um painel mostra o funil e o custo de IA por conversa.",
         stack: ["LangGraph", "Next.js", "Postgres", "Z-API"],
       },
       {
         slug: "quehorasvoto",
-        selo: "no ar · 27 UFs",
+        selo: "SaaS · 27 UFs",
         desc: "Quantas pessoas votaram em cada meia hora na sua seção eleitoral, contado direto dos logs de urna publicados pelo TSE.",
         stack: ["Python", "Cloudflare Workers"],
       },
@@ -283,12 +260,12 @@ export const site: Site = {
       },
       {
         slug: "agendamento-de-exames",
-        nome: "Agendamento de exames",
+        nome: "Agente de agendamento de exames",
         area: "ia",
         selo: "trabalho · NDA",
         ano: "2026",
-        desc: "Hospital de grande porte: do n8n para agente em código com harness. De ~120 para ~230 marcações concluídas nos primeiros meses após a migração.",
-        stack: ["agente em código", "guardrails", "modelos locais"],
+        desc: "Agente conversacional que agenda exames num hospital de grande porte. Saiu do n8n para código com harness engineering: policies, hooks e guardrails em volta do LLM, e modelos locais quantizados para classificar os atendimentos. Antes o agente alucinava e o usuário abandonava a marcação; depois, as concluídas foram de ~120 para ~230 nos primeiros meses após a migração.",
+        stack: ["agente conversacional", "harness engineering", "policies · hooks", "guardrails", "LLMs locais", "multi-tenant"],
       },
       {
         slug: "design-to-bot",
@@ -303,7 +280,7 @@ export const site: Site = {
         slug: "geniai-agente",
         nome: "geniai-agente",
         area: "ia",
-        selo: "no ar",
+        selo: "freelance",
         ano: "2026",
         desc: "Pré-vendas no WhatsApp com texto e áudio, triagem e passagem ao especialista. Painel com funil e custo de IA por conversa.",
         stack: ["LangGraph", "Next.js", "Z-API"],
@@ -334,22 +311,12 @@ export const site: Site = {
         slug: "quehorasvoto",
         nome: "quehorasvoto",
         area: "web",
-        selo: "no ar",
+        selo: "SaaS",
         ano: "2026",
         desc: "Votos por meia hora em cada seção eleitoral, contados dos logs de urna do TSE, para escolher o horário mais vazio.",
         stack: ["Python", "Cloudflare Workers"],
         repo: gh("quehorasvoto"),
         site: "https://quehorasvoto.green-grid.workers.dev",
-      },
-      {
-        slug: "formula-de-impacto",
-        nome: "formula-de-impacto",
-        area: "web",
-        selo: "código aberto",
-        ano: "2026",
-        desc: "Formulário de entrevista de campo que monta só as perguntas de quem está na frente. Funciona sem sinal de celular.",
-        stack: ["JavaScript", "offline", "97 testes"],
-        repo: gh("formula-de-impacto"),
       },
       {
         slug: "achei-no-campus",
@@ -365,7 +332,7 @@ export const site: Site = {
         slug: "vox",
         nome: "vox",
         area: "tool",
-        selo: "fork",
+        selo: "código aberto",
         ano: "2026",
         desc: "Ditado local por push-to-talk no Linux, adaptado para Fedora com Wayland e sem GPU. Nada sai da máquina.",
         stack: ["Go", "Whisper"],
@@ -458,7 +425,6 @@ export const site: Site = {
     proximo: "próximo →",
   },
   sobre: {
-    eyebrow: "joão pessoa, pb · 7°07′S 34°52′W",
     titulo: "Sobre",
     paragrafos: [
       [{ hi: "Sou engenheiro de IA aplicada e desenvolvedor full stack." }, " Construo agentes de IA, pipelines RAG e automações que rodam em produção, com foco em sistemas viáveis de operar em escala, não protótipos caros."],
@@ -482,11 +448,11 @@ export const site: Site = {
       {
         quando: "nov/2025 — hoje",
         org: "Smartspace",
-        papel: "engenheiro de IA e dados · joão pessoa",
+        papel: "engenheiro de IA · joão pessoa",
         itens: [
-          "Agendamento de exames de um hospital de grande porte, do n8n para agente em código com harness: de ~120 para ~230 marcações concluídas nos primeiros meses após a migração.",
+          "Agente conversacional de agendamento de exames de um hospital de grande porte, do n8n para código com harness engineering (policies, hooks e guardrails): de ~120 para ~230 marcações concluídas nos primeiros meses após a migração.",
           "Design-to-bot: o Figma vira JSON e o JSON vira bot no Botpress. −80% no ciclo de engenharia; apresentado no TechUpdate.",
-          "Agentes de IA para o Banco do Nordeste e agentes corporativos no Copilot Studio com Power Automate e Microsoft Graph.",
+          "Agentes de IA para um banco com alta escala de usuários e agentes corporativos no Copilot Studio com Power Automate e Microsoft Graph.",
           "Testes em Pytest para agentes e integrações; CI/CD com GitHub Actions.",
         ],
       },

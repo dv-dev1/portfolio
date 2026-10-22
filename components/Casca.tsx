@@ -75,7 +75,6 @@ export function Casca({ locale, site, pagina, rota, animacao = "l-sweep", childr
           </nav>
           <div className="l-sheet-pe">
             <Idiomas locale={locale} rota={rota} rotulo={ui.idioma} />
-            <span className="l-mono l-dim">{ui.coordenadas}</span>
           </div>
         </MenuCelular>
       </header>
