@@ -243,3 +243,28 @@ test("sobre em pt aponta a versão em inglês", async ({ page }) => {
     "https://daniel-vieira.green-grid.workers.dev/en/about/",
   );
 });
+
+test("no computador a página sai em 80% e a luz fica fora da escala", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await abrir(page, "/en/");
+  const zoom = (seletor: string) => page.locator(seletor).first().evaluate((e) => e.currentCSSZoom);
+  expect(await zoom("main")).toBeCloseTo(0.8);
+  expect(await zoom("header")).toBeCloseTo(0.8);
+  expect(await zoom(".l-light")).toBe(1);
+});
+
+test("no celular a escala não muda @celular", async ({ page }) => {
+  await abrir(page, "/pt/");
+  expect(await page.locator("main").evaluate((e) => e.currentCSSZoom)).toBe(1);
+});
+
+for (const url of ["/en/", "/404.html"]) {
+  test(`favicon DV em ${url}`, async ({ page, request }) => {
+    await page.goto(url);
+    const href = await page.locator('link[rel="icon"]').first().getAttribute("href");
+    expect(href).toMatch(/\.svg/);
+    const resposta = await request.get(href!);
+    expect(resposta.status()).toBe(200);
+    expect(await resposta.text()).toContain("DV");
+  });
+}

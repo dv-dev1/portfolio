@@ -24,6 +24,8 @@
 *,*::before,*::after{box-sizing:border-box}
 html{background:var(--preto)}
 body{margin:0;overflow-x:hidden;background:var(--preto);color:var(--texto);font-family:var(--font-sans),system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+/* A luz fica fora do zoom: clientX não escala, e --lx dentro dele cairia longe do ponteiro. */
+@media (min-width:901px){body>:not(.l-light){zoom:.8}}
 
 .l-light{position:fixed;inset:0;pointer-events:none;z-index:30;mix-blend-mode:color-dodge;background:radial-gradient(180px circle at var(--lx) var(--ly),rgba(var(--luz),.92),rgba(var(--luz),0)),radial-gradient(520px circle at var(--lx) var(--ly),rgba(var(--luz),.45),rgba(var(--luz),0))}
 .l-sweep{animation:l-sweep 2.2s cubic-bezier(.45,0,.2,1) .2s}
