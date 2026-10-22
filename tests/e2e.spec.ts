@@ -93,9 +93,9 @@ test.describe("movimento reduzido", () => {
   });
 });
 
-test("com cursor, o título começa apagado", async ({ page }) => {
+test("com cursor, o nome já começa aceso", async ({ page }) => {
   await abrir(page, "/pt/");
-  await expect(page.locator("h1")).toHaveCSS("color", "rgb(94, 94, 94)");
+  await expect(page.locator("h1")).toHaveCSS("color", "rgb(230, 225, 217)");
 });
 
 test.describe("trace da borda", () => {
@@ -218,20 +218,17 @@ test("cards do início levam ao caso ou ao site", async ({ page }) => {
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("agentgraph");
 });
 
-test("sobre com foto, sem currículo e sem WhatsApp de contato", async ({ page }) => {
+test("sobre sem foto, sem currículo e sem WhatsApp de contato", async ({ page }) => {
   await abrir(page, "/pt/#sobre");
   await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
   await expect(page.getByRole("heading", { level: 2, name: "Sobre" })).toBeVisible();
   await expect(page.locator(".l-traj > li")).toHaveCount(5);
-  const foto = page.locator("#sobre img");
-  await expect(foto).toHaveCount(1);
-  await expect(foto).toHaveAttribute("alt", /Daniel Vieira/);
-  await expect.poll(() => foto.evaluate((i: HTMLImageElement) => i.naturalWidth)).toBe(640);
+  await expect(page.locator("#sobre img")).toHaveCount(0);
   await expect(page.locator("main")).not.toContainText("PDF");
   await expect(page.locator('a[href*="wa.me"]')).toHaveCount(0);
   await expect(page.locator(".l-convite")).toHaveCount(0);
   await abrir(page, "/en/#sobre");
-  await expect(page.locator("#sobre img")).toHaveAttribute("alt", /Daniel Vieira/);
+  await expect(page.locator("#sobre img")).toHaveCount(0);
 });
 
 const link = (page: Page, nome: string) => page.locator(".l-nav-links").getByRole("link", { name: nome, exact: true });

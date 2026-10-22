@@ -87,7 +87,7 @@ section[id],footer[id],#lista{scroll-margin-top:76px}
 .l-sheet .l-lang [aria-current]{border-color:var(--aceso-toque);color:var(--aceso-toque)}
 
 .l-hero{min-height:min(600px,calc(100svh - 76px));display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:72px}
-.p-inicio .l-h1{font-size:clamp(56px,7.2vw,104px);line-height:.84}
+.p-inicio .l-h1{font-size:clamp(56px,7.2vw,104px);line-height:.84;color:var(--aceso-toque)}
 .l-hero-pe{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:32px;margin-top:44px}
 .l-now{display:flex;flex-wrap:wrap;gap:10px 36px;margin:56px 0 0;padding-top:22px;border-top:1px solid var(--linha)}
 .l-now div{display:flex;gap:10px}
@@ -203,7 +203,6 @@ a.l-row:hover .l-arrow{transform:translateX(6px);color:var(--aceso)}
 .l-intro{display:flex;flex-wrap:wrap;gap:56px;align-items:flex-end;margin-top:40px}
 .l-intro-texto{flex:1 1 420px;max-width:640px}
 .l-intro .l-acoes{margin-top:32px}
-.l-foto{width:min(100%,320px);height:auto;border-radius:8px}
 .l-traj{position:relative;list-style:none;margin:48px 0 0;padding:0}
 .l-traj::before{content:"";position:absolute;left:220px;top:8px;bottom:8px;width:1px;background:var(--linha)}
 .l-traj::after{content:"";position:absolute;left:219px;top:8px;width:3px;height:120px;border-radius:3px;background:linear-gradient(180deg,transparent,rgba(var(--luz),.15) 35%,rgba(var(--luz),.7) 90%,#fff);filter:drop-shadow(0 0 6px rgba(var(--luz),.9));animation:l-vbeam 7s linear infinite}
@@ -276,10 +275,6 @@ a.l-row:hover .l-arrow{transform:translateX(6px);color:var(--aceso)}
  .l-t,.l-hide{color:var(--aceso-toque)}
  .l-light{display:none}
 }
-@media (hover:none) and (prefers-reduced-motion:no-preference){
- .l-acende{background:linear-gradient(90deg,var(--aceso-toque) 0 40%,var(--oculto) 60%);background-size:260% 100%;background-position:100% 0;-webkit-background-clip:text;background-clip:text;color:transparent;animation:l-acende 2.4s cubic-bezier(.45,0,.2,1) .3s forwards}
-}
-@keyframes l-acende{to{background-position:0 0}}
 @media (prefers-reduced-motion:reduce){
  .l-sweep,.l-busca,.l-beam,.l-st,.l-k,.l-stations::after,.l-traj::after,.l-dot,.l-gprog{animation:none}
  .l-tl{animation:none;clip-path:none}

@@ -65,7 +65,7 @@ export type Site = {
     verProjetos: string;
     seguirFeixe: string;
     agora: Rotulado[];
-    cidade: string;
+    local: string;
     fuso: string;
     selecionados: string;
     todos: string;
@@ -103,7 +103,6 @@ export type Site = {
   sobre: {
     titulo: string;
     paragrafos: Paragrafo[];
-    fotoAlt: string;
     linkedin: string;
     trajetoria: string;
     empregos: Emprego[];
@@ -154,7 +153,7 @@ export const codHumano = [
 export const site: Site = {
   meta: {
     titulo: "Daniel Vieira · engenheiro de IA aplicada",
-    descricao: "Agentes, pipelines RAG e automações que rodam em produção. Projetos, estudo de caso e contato de Daniel Vieira, em João Pessoa.",
+    descricao: "Agentes, pipelines RAG e automações que rodam em produção. Projetos, estudo de caso e contato de Daniel Vieira, no Brasil.",
   },
   ui: {
     navegacao: "Principal",
@@ -165,13 +164,13 @@ export const site: Site = {
     contato: "Contato",
     menu: "Menu",
     fechar: "Fechar",
-    copyright: "© 2026 Daniel Vieira · João Pessoa, PB",
+    copyright: "© 2026 Daniel Vieira · Brasil",
     contatoLink: "contato →",
     lerCaso: "ler o estudo de caso →",
     verProjeto: "ver projeto →",
   },
   inicio: {
-    eyebrow: "engenheiro de IA aplicada · full stack · joão pessoa",
+    eyebrow: "engenheiro de IA aplicada · full stack",
     titulo: "Daniel\nVieira",
     lead: [{ hi: "Construo agentes, pipelines RAG e automações que rodam em produção." }, " Sistemas de IA viáveis de operar em escala, não protótipos caros."],
     verProjetos: "Ver projetos",
@@ -180,7 +179,7 @@ export const site: Site = {
       { k: "agora", v: "Smartspace · IA e full stack" },
       { k: "e", v: "Etros Logística · automação e IA" },
     ],
-    cidade: "joão pessoa",
+    local: "Brasil",
     fuso: "UTC−3",
     selecionados: "Projetos\nselecionados",
     todos: "todos os projetos →",
@@ -245,7 +244,6 @@ export const site: Site = {
       { id: "ia", rotulo: "Agentes e IA" },
       { id: "auto", rotulo: "Automação" },
       { id: "web", rotulo: "Produto e web" },
-      { id: "tool", rotulo: "Ferramentas" },
     ],
     lista: [
       {
@@ -298,16 +296,6 @@ export const site: Site = {
         repo: gh("emporio-da-musica-agent"),
       },
       {
-        slug: "n8n-rag-catalog-optimizer",
-        nome: "n8n-rag-catalog-optimizer",
-        area: "auto",
-        selo: "estudo de caso",
-        ano: "2025",
-        desc: "Catálogo de 2.000+ produtos fora do prompt e dentro do Pinecone: de US$ 6,00 para US$ 0,04 por consulta.",
-        stack: ["n8n", "Pinecone", "RAG"],
-        repo: gh("n8n-rag-catalog-optimizer"),
-      },
-      {
         slug: "quehorasvoto",
         nome: "quehorasvoto",
         area: "web",
@@ -317,26 +305,6 @@ export const site: Site = {
         stack: ["Python", "Cloudflare Workers"],
         repo: gh("quehorasvoto"),
         site: "https://quehorasvoto.green-grid.workers.dev",
-      },
-      {
-        slug: "achei-no-campus",
-        nome: "achei-no-campus",
-        area: "web",
-        selo: "acadêmico",
-        ano: "2026",
-        desc: "Achados e perdidos da UNIPÊ: app mobile para registrar e encontrar objetos no campus.",
-        stack: ["Flutter", "Firebase"],
-        repo: gh("achei-no-campus"),
-      },
-      {
-        slug: "vox",
-        nome: "vox",
-        area: "tool",
-        selo: "código aberto",
-        ano: "2026",
-        desc: "Ditado local por push-to-talk no Linux, adaptado para Fedora com Wayland e sem GPU. Nada sai da máquina.",
-        stack: ["Go", "Whisper"],
-        repo: gh("vox"),
       },
     ],
   },
@@ -430,7 +398,6 @@ export const site: Site = {
       [{ hi: "Sou engenheiro de IA aplicada e desenvolvedor full stack." }, " Construo agentes de IA, pipelines RAG e automações que rodam em produção, com foco em sistemas viáveis de operar em escala, não protótipos caros."],
       ["Hoje trabalho na Smartspace com IA conversacional, agentes corporativos e dados, e na Etros Logística com automação e IA para operações de comércio exterior."],
     ],
-    fotoAlt: "Daniel Vieira na praia, de óculos escuros e camiseta preta",
     linkedin: "LinkedIn ↗",
     trajetoria: "Trajetória",
     empregos: [
@@ -448,7 +415,7 @@ export const site: Site = {
       {
         quando: "nov/2025 — hoje",
         org: "Smartspace",
-        papel: "engenheiro de IA · joão pessoa",
+        papel: "engenheiro de IA",
         itens: [
           "Agente conversacional de agendamento de exames de um hospital de grande porte, do n8n para código com harness engineering (policies, hooks e guardrails): de ~120 para ~230 marcações concluídas nos primeiros meses após a migração.",
           "Design-to-bot: o Figma vira JSON e o JSON vira bot no Botpress. −80% no ciclo de engenharia; apresentado no TechUpdate.",
@@ -459,7 +426,7 @@ export const site: Site = {
       {
         quando: "jul — nov/2025",
         org: "Inteligentte Lab",
-        papel: "estágio em IA aplicada · joão pessoa",
+        papel: "estágio em IA aplicada",
         itens: [
           "RAG com Pinecone sobre um catálogo de 2.000+ produtos: de US$ 6,00 para US$ 0,04 por consulta (−99,3%). Com o mesmo orçamento, de 3 para 500 clientes por dia.",
           "APIs REST em FastAPI para agentes; Supabase com Row Level Security.",
@@ -468,7 +435,7 @@ export const site: Site = {
       {
         quando: "jul — nov/2025",
         org: "Agência Quinze",
-        papel: "estágio em automação e agentes · joão pessoa",
+        papel: "estágio em automação e agentes",
         itens: ["Fluxos em Make e n8n para eliminar tarefas repetitivas.", "Integração entre CRM, ferramentas de marketing e ClickUp via APIs e webhooks."],
       },
       {

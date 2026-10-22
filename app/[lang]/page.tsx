@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { Casca } from "@/components/Casca";
 import { CopiarEmail, EmailLink } from "@/components/Email";
 import { ListaProjetos } from "@/components/ListaProjetos";
@@ -6,7 +5,6 @@ import { Relogio } from "@/components/Relogio";
 import { SecaoAtiva } from "@/components/SecaoAtiva";
 import { Linhas, Rico, numero } from "@/components/Texto";
 import { TraceAoVivo } from "@/components/TraceAoVivo";
-import foto from "@/content/foto.webp";
 import { destino, getLocale, getSite } from "@/content/i18n";
 import { perfis } from "@/content/locales";
 
@@ -26,7 +24,7 @@ export default async function Inicio() {
       <main className="p-inicio">
         <section id="topo" className="l-wrap l-hero">
           <p className="l-mono l-dim l-eyebrow">{t.eyebrow}</p>
-          <h1 className="l-t l-h1 l-acende">
+          <h1 className="l-t l-h1">
             <Linhas texto={t.titulo} />
           </h1>
           <div className="l-hero-pe">
@@ -50,7 +48,7 @@ export default async function Inicio() {
               </div>
             ))}
             <div className="l-now-hora">
-              <dt>{t.cidade}</dt>
+              <dt>{t.local}</dt>
               <dd>
                 <Relogio /> · {t.fuso}
               </dd>
@@ -125,7 +123,6 @@ export default async function Inicio() {
                   </a>
                 </div>
               </div>
-              <Image className="l-foto" src={foto} alt={s.fotoAlt} />
             </div>
           </div>
 

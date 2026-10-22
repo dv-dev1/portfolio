@@ -4,7 +4,7 @@ import { codHumano, codNo, gh, resume, run, type Site } from "./pt.ts";
 export const site: Site = {
   meta: {
     titulo: "Daniel Vieira · applied AI engineer",
-    descricao: "Agents, RAG pipelines and automations that run in production. Projects, a case study and contact for Daniel Vieira, in João Pessoa, Brazil.",
+    descricao: "Agents, RAG pipelines and automations that run in production. Projects, a case study and contact for Daniel Vieira, in Brazil.",
   },
   ui: {
     navegacao: "Main",
@@ -15,13 +15,13 @@ export const site: Site = {
     contato: "Contact",
     menu: "Menu",
     fechar: "Close",
-    copyright: "© 2026 Daniel Vieira · João Pessoa, Brazil",
+    copyright: "© 2026 Daniel Vieira · Brazil",
     contatoLink: "contact →",
     lerCaso: "read the case study →",
     verProjeto: "see project →",
   },
   inicio: {
-    eyebrow: "applied AI engineer · full stack · joão pessoa",
+    eyebrow: "applied AI engineer · full stack",
     titulo: "Daniel\nVieira",
     lead: [{ hi: "I build agents, RAG pipelines and automations that run in production." }, " AI systems that are viable to operate at scale, not expensive prototypes."],
     verProjetos: "See projects",
@@ -30,7 +30,7 @@ export const site: Site = {
       { k: "now", v: "Smartspace · AI and full stack" },
       { k: "and", v: "Etros Logística · automation and AI" },
     ],
-    cidade: "joão pessoa",
+    local: "Brazil",
     fuso: "UTC−3",
     selecionados: "Selected\nprojects",
     todos: "all projects →",
@@ -95,7 +95,6 @@ export const site: Site = {
       { id: "ia", rotulo: "Agents and AI" },
       { id: "auto", rotulo: "Automation" },
       { id: "web", rotulo: "Product and web" },
-      { id: "tool", rotulo: "Tools" },
     ],
     lista: [
       {
@@ -148,16 +147,6 @@ export const site: Site = {
         repo: gh("emporio-da-musica-agent"),
       },
       {
-        slug: "n8n-rag-catalog-optimizer",
-        nome: "n8n-rag-catalog-optimizer",
-        area: "auto",
-        selo: "case study",
-        ano: "2025",
-        desc: "A 2,000+ product catalog out of the prompt and into Pinecone: from US$ 6.00 to US$ 0.04 per query.",
-        stack: ["n8n", "Pinecone", "RAG"],
-        repo: gh("n8n-rag-catalog-optimizer"),
-      },
-      {
         slug: "quehorasvoto",
         nome: "quehorasvoto",
         area: "web",
@@ -167,26 +156,6 @@ export const site: Site = {
         stack: ["Python", "Cloudflare Workers"],
         repo: gh("quehorasvoto"),
         site: "https://quehorasvoto.green-grid.workers.dev",
-      },
-      {
-        slug: "achei-no-campus",
-        nome: "achei-no-campus",
-        area: "web",
-        selo: "academic",
-        ano: "2026",
-        desc: "Lost and found for UNIPÊ: a mobile app to register and find objects on campus.",
-        stack: ["Flutter", "Firebase"],
-        repo: gh("achei-no-campus"),
-      },
-      {
-        slug: "vox",
-        nome: "vox",
-        area: "tool",
-        selo: "open source",
-        ano: "2026",
-        desc: "Local push-to-talk dictation on Linux, adapted for Fedora with Wayland and no GPU. Nothing leaves the machine.",
-        stack: ["Go", "Whisper"],
-        repo: gh("vox"),
       },
     ],
   },
@@ -280,7 +249,6 @@ export const site: Site = {
       [{ hi: "I am an applied AI engineer and full stack developer." }, " I build AI agents, RAG pipelines and automations that run in production, focused on systems that are viable to operate at scale, not expensive prototypes."],
       ["Today I work at Smartspace on conversational AI, enterprise agents and data, and at Etros Logística on automation and AI for foreign trade operations."],
     ],
-    fotoAlt: "Daniel Vieira at the beach, wearing sunglasses and a black t-shirt",
     linkedin: "LinkedIn ↗",
     trajetoria: "Career",
     empregos: [
@@ -298,7 +266,7 @@ export const site: Site = {
       {
         quando: "nov/2025 — now",
         org: "Smartspace",
-        papel: "AI engineer · joão pessoa",
+        papel: "AI engineer",
         itens: [
           "Conversational exam scheduling agent for a large hospital, moved from n8n to code with harness engineering (policies, hooks and guardrails): from ~120 to ~230 completed bookings in the first months after the migration.",
           "Design-to-bot: Figma becomes JSON and JSON becomes a Botpress bot. −80% in the engineering cycle; presented at TechUpdate.",
@@ -309,7 +277,7 @@ export const site: Site = {
       {
         quando: "jul — nov/2025",
         org: "Inteligentte Lab",
-        papel: "applied AI intern · joão pessoa",
+        papel: "applied AI intern",
         itens: [
           "RAG with Pinecone over a 2,000+ product catalog: from US$ 6.00 to US$ 0.04 per query (−99.3%). With the same budget, from 3 to 500 customers a day.",
           "REST APIs in FastAPI for agents; Supabase with Row Level Security.",
@@ -318,7 +286,7 @@ export const site: Site = {
       {
         quando: "jul — nov/2025",
         org: "Agência Quinze",
-        papel: "automation and agents intern · joão pessoa",
+        papel: "automation and agents intern",
         itens: ["Make and n8n flows to remove repetitive tasks.", "Integration between CRM, marketing tools and ClickUp via APIs and webhooks."],
       },
       {

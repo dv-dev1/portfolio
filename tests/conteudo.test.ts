@@ -15,6 +15,8 @@ const proibidos: [string, RegExp][] = [
   ["ECS", /\bECS\b/],
   ["CAIXA", /\bCAIXA\b/],
   ["wa.me", /wa\.me/i],
+  ["cidade", /jo[aã]o pessoa/i],
+  ["projeto retirado", /n8n-rag-catalog-optimizer|achei-no-campus|dv-dev1\/vox\b|gh\("vox"\)/],
 ];
 
 // O repositório é público: o que está sob NDA entra por hash, ou a guarda publicaria o que esconde.
