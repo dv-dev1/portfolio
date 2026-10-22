@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { Casca } from "@/components/Casca";
+import foto from "@/content/foto.webp";
 import { Rico } from "@/components/Texto";
 import { alternates, getLocale, getSite } from "@/content/i18n";
 import { perfis } from "@/content/locales";
@@ -32,6 +34,7 @@ export default async function Sobre() {
                 </a>
               </div>
             </div>
+            <Image className="l-foto" src={foto} alt={s.fotoAlt} priority />
           </div>
         </section>
 

@@ -108,6 +108,7 @@ export type Site = {
     eyebrow: string;
     titulo: string;
     paragrafos: Paragrafo[];
+    fotoAlt: string;
     linkedin: string;
     trajetoria: string;
     empregos: Emprego[];
@@ -468,6 +469,7 @@ export const site: Site = {
       [{ hi: "Sou engenheiro de IA aplicada e desenvolvedor full stack." }, " Construo agentes de IA, pipelines RAG e automações que rodam em produção, com foco em sistemas viáveis de operar em escala, não protótipos caros."],
       ["Hoje trabalho na Smartspace com IA conversacional, agentes corporativos e dados, e na Etros Logística com automação e IA para operações de comércio exterior."],
     ],
+    fotoAlt: "Daniel Vieira na praia, de óculos escuros e camiseta preta",
     linkedin: "LinkedIn ↗",
     trajetoria: "Trajetória",
     empregos: [

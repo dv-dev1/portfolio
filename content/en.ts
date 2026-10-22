@@ -311,6 +311,7 @@ export const site: Site = {
       [{ hi: "I am an applied AI engineer and full stack developer." }, " I build AI agents, RAG pipelines and automations that run in production, focused on systems that are viable to operate at scale, not expensive prototypes."],
       ["Today I work at Smartspace on conversational AI, enterprise agents and data, and at Etros Logística on automation and AI for foreign trade operations."],
     ],
+    fotoAlt: "Daniel Vieira at the beach, wearing sunglasses and a black t-shirt",
     linkedin: "LinkedIn ↗",
     trajetoria: "Career",
     empregos: [

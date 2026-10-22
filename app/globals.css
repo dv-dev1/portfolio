@@ -201,6 +201,7 @@ a.l-row:hover .l-arrow{transform:translateX(6px);color:var(--aceso)}
 .l-intro{display:flex;flex-wrap:wrap;gap:56px;align-items:flex-end;margin-top:64px}
 .l-intro-texto{flex:1 1 420px;max-width:640px}
 .l-intro .l-acoes{margin-top:32px}
+.l-foto{width:min(100%,320px);height:auto;border-radius:8px}
 .l-traj{position:relative;list-style:none;margin:72px 0 0;padding:0}
 .l-traj::before{content:"";position:absolute;left:220px;top:8px;bottom:8px;width:1px;background:var(--linha)}
 .l-traj::after{content:"";position:absolute;left:219px;top:8px;width:3px;height:120px;border-radius:3px;background:linear-gradient(180deg,transparent,rgba(var(--luz),.15) 35%,rgba(var(--luz),.7) 90%,#fff);filter:drop-shadow(0 0 6px rgba(var(--luz),.9));animation:l-vbeam 7s linear infinite}
